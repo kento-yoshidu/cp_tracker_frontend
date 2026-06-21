@@ -1,4 +1,5 @@
-import Header from "./_compnents/Header";
+import Header from "./_compnents/Header/Header";
+import styles from "./layout.module.css";
 import "./globals.css";
 
 export default function RootLayout({
@@ -9,8 +10,11 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <Header />
+        <div className={styles.wrapper}>
+          <Header />
           {children}
+
+        </div>
       </body>
     </html>
   );

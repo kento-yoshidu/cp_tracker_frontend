@@ -1,0 +1,13 @@
+.table {
+  border-collapse: collapse;
+  border: 1px solid #fff;
+  max-width: var(--max-width);
+  margin: 0 auto;
+
+  th,
+  td {
+    padding: 8px 16px;
+    border: 1px solid #fff;
+    text-align: left;
+  }
+}
