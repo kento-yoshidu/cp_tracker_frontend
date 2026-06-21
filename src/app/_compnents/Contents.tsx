@@ -1,18 +1,13 @@
 import { Suspense } from "react";
 import fetchProblemsServer from "../apis/fetchProblems.servre";
+import Table from "./Table/Table";
 
 export default async function Contents() {
   const data = await fetchProblemsServer();
 
-  console.log("data = ", data);
-
   return (
     <Suspense fallback={<p>Loading...</p>}>
-      {data.map((d) => {
-        return (
-          <p>{d.id}</p>
-        )
-      })}
+      <Table data={data} />
     </Suspense>
   );
 }
