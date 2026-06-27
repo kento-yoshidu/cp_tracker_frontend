@@ -5,6 +5,7 @@ import Link from "next/link";
 import styles from "./table.module.css";
 import updateAcCountClient from "@/app/apis/updateAcCount.client";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 type Props = {
   data: Problems[];
@@ -13,8 +14,11 @@ type Props = {
 export default function Table({
   data,
 }: Props) {
+  const router = useRouter();
+
   const mutation = useMutation({
     mutationFn: (id: string) => updateAcCountClient(id),
+    onSuccess: () => router.refresh(),
   });
 
   const handlerAc = (id: string) => {
