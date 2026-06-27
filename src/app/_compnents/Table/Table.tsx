@@ -1,6 +1,10 @@
+"use client";
+
 import { Problems } from "@/types"
 import Link from "next/link";
 import styles from "./table.module.css";
+import updateAcCountClient from "@/app/apis/updateAcCount.client";
+import { useMutation } from "@tanstack/react-query";
 
 type Props = {
   data: Problems[];
@@ -9,6 +13,20 @@ type Props = {
 export default function Table({
   data,
 }: Props) {
+  const mutation = useMutation({
+    mutationFn: (id: string) => updateAcCountClient(id),
+  });
+
+  const handlerAc = (id: string) => {
+    mutation.mutate(id);
+  };
+
+  if (mutation.isPending) {
+    return (
+      <div>Loading...</div>
+    )
+  }
+
   return (
     <table className={styles.table}>
       <thead>
@@ -33,9 +51,12 @@ export default function Table({
               </Link>
             </td>
             <td>{data.tags.map((tag) => (
-              <div>{tag}</div>
+              <div key={`tag-${tag}`}>{tag}</div>
             ))}</td>
-            <td>{data.ac_count}</td>
+            <td>
+              {data.ac_count}
+              <button onClick={() => handlerAc(data.id)}>+1</button>
+            </td>
             <td>{data.last_solved_at ?? "-"}</td>
           </tr>
         ))}
