@@ -6,6 +6,9 @@ import styles from "./table.module.css";
 import updateAcCountClient from "@/app/apis/updateAcCount.client";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import FullScreenLoading from "../UI/FullScreenLoading";
+import Tag from "../Tag/Tag";
+import Button from "../UI/Button";
 
 type Props = {
   data: Problems[];
@@ -25,46 +28,63 @@ export default function Table({
     mutation.mutate(id);
   };
 
-  if (mutation.isPending) {
-    return (
-      <div>Loading...</div>
-    )
-  }
-
   return (
-    <table className={styles.table}>
-      <thead>
-        <tr>
-          <th>プラット<br />フォーム</th>
-          <th>問題</th>
-          <th>URL</th>
-          <th>タグ</th>
-          <th>ACカウント</th>
-          <th>最終AC日</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {data.map((data) => (
-          <tr key={data.id}>
-            <td>{data.platform}</td>
-            <td>{data.title}</td>
-            <td>
-              <Link href={data.url}>
-                問題
-              </Link>
-            </td>
-            <td>{data.tags.map((tag) => (
-              <div key={`tag-${tag}`}>{tag}</div>
-            ))}</td>
-            <td>
-              {data.ac_count}
-              <button onClick={() => handlerAc(data.id)}>+1</button>
-            </td>
-            <td>{data.last_solved_at ?? "-"}</td>
+    <>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>プラット<br />フォーム</th>
+            <th>問題</th>
+            <th>URL</th>
+            <th>タグ</th>
+            <th>ACカウント</th>
+            <th>最終AC日</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          {data.map((data) => (
+            <tr key={data.id}>
+              <td>{data.platform}</td>
+              <td>{data.title}</td>
+              <td>
+                <Link href={data.url}>
+                  問題
+                </Link>
+              </td>
+              <td>
+                <div className={styles.tags}>
+                  {data.tags.map((tag) => (
+                    <Tag
+                      key={`tag-${tag}`}
+                      tagName={tag}
+                    />
+                  ))}
+
+                </div>
+              </td>
+
+              <td>
+                <div className={styles.acCount}>
+                <p>{data.ac_count}</p>
+
+                <Button
+                  title="+1"
+                  onClick={() => handlerAc(data.id)}
+                />
+
+                </div>
+              </td>
+
+              <td>{data.last_solved_at ?? "-"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {mutation.isPending && (
+        <FullScreenLoading />
+      )}
+    </>
   )
 }

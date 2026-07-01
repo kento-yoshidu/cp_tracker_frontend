@@ -3,11 +3,33 @@
   border: 1px solid #fff;
   max-width: var(--max-width);
   margin: 0 auto;
+  font-size: 16px;
 
   th,
   td {
     padding: 8px 16px;
     border: 1px solid #fff;
     text-align: left;
+  }
+
+  td:has(.tags) {
+    width: 400px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .acCount {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    p {
+      font-weight: 700;
+    }
   }
 }
