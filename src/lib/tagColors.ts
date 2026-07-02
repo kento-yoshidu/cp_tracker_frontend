@@ -23,7 +23,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   string:          { bg: "linear-gradient(135deg, #c2410c, #b91c1c)", text: "#fff" },
   sorting:         { bg: "linear-gradient(135deg, #65a30d, #059669)", text: "#fff" },
   "segment-tree":  { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
-  "union-find":    { bg: "linear-gradient(135deg, #0f766e, #0891b2)", text: "#fff" },
+  "Union Find":    { bg: "linear-gradient(135deg, #0f766e, #0891b2)", text: "#fff" },
   "shortest-path": { bg: "linear-gradient(135deg, #1d4ed8, #4338ca)", text: "#fff" },
   tree:            { bg: "linear-gradient(135deg, #15803d, #059669)", text: "#fff" },
   bit:             { bg: "linear-gradient(135deg, #b45309, #ca8a04)", text: "#fff" },
