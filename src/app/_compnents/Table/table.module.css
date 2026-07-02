@@ -16,6 +16,23 @@
     width: 400px;
   }
 
+  .titleWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+
+    .title {
+      color: #fff;
+      text-align: left;
+      transition: 0.3s;
+
+      &:hover {
+        color: blue;
+      }
+    }
+  }
+
   .tags {
     display: flex;
     flex-wrap: wrap;

@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import FullScreenLoading from "../UI/FullScreenLoading";
 import Tag from "../Tag/Tag";
 import Button from "../UI/Button";
+import SolveBadge from "../SolveBadge/SolveBadge";
+import DoneBadge from "../DoneBadge/DoneBadge";
 
 type Props = {
   data: Problems[];
@@ -35,7 +37,6 @@ export default function Table({
           <tr>
             <th>プラット<br />フォーム</th>
             <th>問題</th>
-            <th>URL</th>
             <th>タグ</th>
             <th>ACカウント</th>
             <th>最終AC日</th>
@@ -46,11 +47,22 @@ export default function Table({
           {data.map((data) => (
             <tr key={data.id}>
               <td>{data.platform}</td>
-              <td>{data.title}</td>
               <td>
-                <Link href={data.url}>
-                  問題
-                </Link>
+                <div className={styles.titleWrapper}>
+                  <Link
+                    href={data.url}
+                    className={styles.title}
+                  >
+                    {data.title}
+                  </Link>
+
+                  <SolveBadge
+                    acCount={data.ac_count}
+                    lastSolvedAt={data.last_solved_at}
+                  />
+
+                  <DoneBadge acCount={data.ac_count} />
+                </div>
               </td>
               <td>
                 <div className={styles.tags}>
