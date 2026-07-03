@@ -9,7 +9,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import FullScreenLoading from "../UI/FullScreenLoading";
 import Tag from "../Tag/Tag";
-import Button from "../UI/Button";
 import SolveBadge from "../SolveBadge/SolveBadge";
 import DoneBadge from "../DoneBadge/DoneBadge";
 import AlertModal from "../AlertModal/AlertModal";
@@ -94,10 +93,13 @@ export default function Table({
                 <div className={styles.acCount}>
                 <p>{data.ac_count}</p>
 
-                <Button
-                  title="+1"
+                <button
+                  type="button"
+                  className={styles.acButton}
                   onClick={() => handlerAc(data.id)}
-                />
+                >
+                  +1
+                </button>
 
                 </div>
               </td>
