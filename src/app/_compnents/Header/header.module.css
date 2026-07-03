@@ -1,6 +1,7 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 80px;
   max-width: var(--max-width);
   margin: 0 auto;
@@ -8,5 +9,17 @@
 
   .title {
     font-size: 18px;
+  }
+
+  .productionBadge {
+    padding: 4px 14px;
+    border: 1px solid #ff1744;
+    border-radius: 4px;
+    color: #ff1744;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 4px rgba(255, 23, 68, 0.8), 0 0 10px rgba(255, 23, 68, 0.6);
+    box-shadow: 0 0 6px rgba(255, 23, 68, 0.6), inset 0 0 6px rgba(255, 23, 68, 0.3);
   }
 }
