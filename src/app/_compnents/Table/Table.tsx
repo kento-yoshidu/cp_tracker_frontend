@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Problems } from "@/types"
 import Link from "next/link";
 import styles from "./table.module.css";
@@ -11,6 +12,7 @@ import Tag from "../Tag/Tag";
 import Button from "../UI/Button";
 import SolveBadge from "../SolveBadge/SolveBadge";
 import DoneBadge from "../DoneBadge/DoneBadge";
+import AlertModal from "../AlertModal/AlertModal";
 
 type Props = {
   data: Problems[];
@@ -20,6 +22,7 @@ export default function Table({
   data,
 }: Props) {
   const router = useRouter();
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   const mutation = useMutation({
     mutationFn: (id: string) => updateAcCountClient(id),
@@ -27,7 +30,18 @@ export default function Table({
   });
 
   const handlerAc = (id: string) => {
-    mutation.mutate(id);
+    setConfirmingId(id);
+  };
+
+  const handleConfirmAc = () => {
+    if (confirmingId === null) return;
+
+    mutation.mutate(confirmingId);
+    setConfirmingId(null);
+  };
+
+  const handleCancelAc = () => {
+    setConfirmingId(null);
   };
 
   return (
@@ -96,6 +110,14 @@ export default function Table({
 
       {mutation.isPending && (
         <FullScreenLoading />
+      )}
+
+      {confirmingId !== null && (
+        <AlertModal
+          title="ACカウントを+1します。よろしいですか?"
+          onClick={handleConfirmAc}
+          onClose={handleCancelAc}
+        />
       )}
     </>
   )
