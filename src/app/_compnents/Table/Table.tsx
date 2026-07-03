@@ -12,6 +12,8 @@ import Tag from "../Tag/Tag";
 import SolveBadge from "../SolveBadge/SolveBadge";
 import DoneBadge from "../DoneBadge/DoneBadge";
 import AlertModal from "../AlertModal/AlertModal";
+import DifficultySquare from "../DifficultySquare/DifficultySquare";
+import { formatDate } from "@/lib/formatDate";
 
 type Props = {
   data: Problems[];
@@ -45,10 +47,10 @@ export default function Table({
 
   return (
     <>
+      <div className={styles.tableWrapper}>
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>プラット<br />フォーム</th>
             <th>問題</th>
             <th>タグ</th>
             <th>ACカウント</th>
@@ -59,13 +61,15 @@ export default function Table({
         <tbody>
           {data.map((data) => (
             <tr key={data.id}>
-              <td>{data.platform}</td>
               <td>
                 <div className={styles.titleWrapper}>
+
                   <Link
                     href={data.url}
                     className={styles.title}
                   >
+                    <DifficultySquare difficulty={data.difficulty} />
+
                     {data.title}
                   </Link>
 
@@ -104,11 +108,12 @@ export default function Table({
                 </div>
               </td>
 
-              <td>{data.last_solved_at ?? "-"}</td>
+              <td>{data.last_solved_at ? formatDate(data.last_solved_at) : "-"}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      </div>
 
       {mutation.isPending && (
         <FullScreenLoading />
