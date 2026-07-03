@@ -1,9 +1,10 @@
+import Button from "../Button/Button";
 import styles from "./alertModal.module.css";
 
 type Props = {
   title: string;
   onClick?: () => void;
-  onClose?: () => void;
+  onClose: () => void;
 };
 
 export default function AlertModal({
@@ -24,22 +25,17 @@ export default function AlertModal({
         </div>
 
         <div className={styles.footer}>
-          <button
-            type="button"
-            className={styles.cancelButton}
+          <Button
+            variant="secondary"
+            title="キャンセル"
             onClick={onClose}
-          >
-            キャンセル
-          </button>
+          />
 
-          <button
-            type="button"
-            className={styles.confirmButton}
-            autoFocus
-            onClick={onClick}
-          >
-            OK
-          </button>
+          <Button
+            variant="primary"
+            title="OK"
+            onClick={() => onClick?.()}
+          />
         </div>
       </dialog>
     </>

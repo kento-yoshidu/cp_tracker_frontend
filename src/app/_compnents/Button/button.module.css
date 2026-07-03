@@ -1,0 +1,18 @@
+.button {
+  min-width: 80px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &.primary {
+    background-color: #2563eb;
+  }
+
+  &.secondary {
+    background-color: #666;
+  }
+}

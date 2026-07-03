@@ -1,6 +1,6 @@
 import { apiFetch } from "@/lib/api";
 
-export default function fetchProblemsServer() {
+export default async function fetchProblemsServer() {
   const res = apiFetch("problems");
 
   return res;
