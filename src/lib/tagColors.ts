@@ -4,10 +4,10 @@ type TagColor = {
 };
 
 const TAG_COLORS: Record<string, TagColor> = {
-  // DP: インディゴ → バイオレット
+  // DP
   動的計画法:
     { bg: "linear-gradient(135deg, #4338ca, #7c3aed)", text: "#fff" },
-  "動的計画法-ナップサック":
+  部分和問題:
     { bg: "linear-gradient(135deg, #4338ca, #7c3aed)", text: "#fff" },
   // 二分探索: バイオレット → パープル
   二分探索:
