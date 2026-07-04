@@ -14,6 +14,7 @@ import DoneBadge from "../DoneBadge/DoneBadge";
 import AlertModal from "../AlertModal/AlertModal";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import { formatDate } from "@/lib/formatDate";
+import { shouldShowSolveBadge } from "@/lib/solveBadge";
 
 type Props = {
   data: Problems[];
@@ -24,6 +25,12 @@ export default function Table({
 }: Props) {
   const router = useRouter();
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
+  const [onlySolve, setOnlySolve] = useState(false);
+
+  const filteredData = data.filter((d) => {
+    if (onlySolve && !shouldShowSolveBadge(d.ac_count, d.last_solved_at)) return false;
+    return true;
+  });
 
   const mutation = useMutation({
     mutationFn: (id: string) => updateAcCountClient(id),
@@ -47,6 +54,16 @@ export default function Table({
 
   return (
     <>
+      <div className={styles.filters}>
+        <button
+          type="button"
+          className={onlySolve ? `${styles.filterButton} ${styles.filterButtonActive}` : styles.filterButton}
+          onClick={() => setOnlySolve((prev) => !prev)}
+        >
+          Solve!のみ
+        </button>
+      </div>
+
       <div className={styles.tableWrapper}>
       <table className={styles.table}>
         <thead>
@@ -59,7 +76,7 @@ export default function Table({
         </thead>
 
         <tbody>
-          {data.map((data) => (
+          {filteredData.map((data) => (
             <tr key={data.id}>
               <td>
                 <div className={styles.titleWrapper}>

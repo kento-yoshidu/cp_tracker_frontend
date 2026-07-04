@@ -1,3 +1,32 @@
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto 16px;
+}
+
+.filterButton {
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 14px;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.filterButtonActive {
+  background-color: rgba(var(--color-primary-rgb), 0.5);
+  border-color: var(--color-primary);
+}
+
 .tableWrapper {
   width: 100%;
   max-width: var(--max-width);
