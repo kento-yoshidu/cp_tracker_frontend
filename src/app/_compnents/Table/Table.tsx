@@ -15,6 +15,7 @@ import AlertModal from "../AlertModal/AlertModal";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import { formatDate } from "@/lib/formatDate";
 import { shouldShowSolveBadge } from "@/lib/solveBadge";
+import createNewProblemClient from "@/app/apis/createNewProblem.client";
 
 type Props = {
   data: Problems[];
@@ -32,7 +33,7 @@ export default function Table({
     return true;
   });
 
-  const mutation = useMutation({
+  const acMutation = useMutation({
     mutationFn: (id: string) => updateAcCountClient(id),
     onSuccess: () => router.refresh(),
   });
@@ -44,13 +45,26 @@ export default function Table({
   const handleConfirmAc = () => {
     if (confirmingId === null) return;
 
-    mutation.mutate(confirmingId);
+    acMutation.mutate(confirmingId);
     setConfirmingId(null);
   };
 
   const handleCancelAc = () => {
     setConfirmingId(null);
   };
+
+  const createProblemMutation = useMutation({
+    mutationFn: () => createNewProblemClient(),
+    onSuccess: () => router.refresh(),
+  });
+
+  const handleCreateProblem = () => {
+    createProblemMutation.mutate();
+  };
+
+  const isPending =
+    acMutation.isPending ||
+    createProblemMutation.isPending;
 
   return (
     <>
@@ -61,6 +75,12 @@ export default function Table({
           onClick={() => setOnlySolve((prev) => !prev)}
         >
           Solve!のみ
+        </button>
+
+        <button
+          onClick={handleCreateProblem}
+        >
+          create
         </button>
       </div>
 
@@ -132,9 +152,7 @@ export default function Table({
       </table>
       </div>
 
-      {mutation.isPending && (
-        <FullScreenLoading />
-      )}
+      {isPending && <FullScreenLoading />}
 
       {confirmingId !== null && (
         <AlertModal
