@@ -1,16 +1,10 @@
-export default async function createNewProblemClient(): Promise<void> {
-  const body = {
-    platform: "AtCoder",
-    url: "jga",
-    title: "テスト",
-    tags: ["hoge"],
-    difficulty: 999,
-  };
+import { CreateProblemInput } from "@/types";
 
+export default async function createNewProblemClient(input: CreateProblemInput): Promise<void> {
   const res = await fetch(`/api/problems`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    body: JSON.stringify(input),
   });
 
   if (!res.ok) {

@@ -8,3 +8,11 @@ export type Problems = {
   ac_count: number;
   last_solved_at: string;
 };
+
+export type CreateProblemInput = {
+  platform: string;
+  url: string;
+  title: string;
+  tags: string[];
+  difficulty: number;
+};
