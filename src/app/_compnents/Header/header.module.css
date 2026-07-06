@@ -23,6 +23,12 @@
     color: transparent;
   }
 
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
   .productionBadge {
     padding: 4px 14px;
     border: 1px solid #ff1744;
@@ -33,5 +39,21 @@
     letter-spacing: 0.1em;
     text-shadow: 0 0 4px rgba(255, 23, 68, 0.8), 0 0 10px rgba(255, 23, 68, 0.6);
     box-shadow: 0 0 6px rgba(255, 23, 68, 0.6), inset 0 0 6px rgba(255, 23, 68, 0.3);
+  }
+
+  .addButton {
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: rgba(var(--color-primary-rgb), 0.15);
+    border: 1px solid rgba(var(--color-primary-rgb), 0.5);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s;
+
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+    }
   }
 }

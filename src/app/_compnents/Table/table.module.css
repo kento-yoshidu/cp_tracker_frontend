@@ -74,6 +74,18 @@
     }
   }
 
+  tbody tr.doneRow {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.35);
+      pointer-events: none;
+    }
+  }
+
   td:has(.titleWrapper) {
     width: 400px;
   }

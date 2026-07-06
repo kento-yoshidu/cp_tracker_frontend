@@ -14,8 +14,7 @@ import DoneBadge from "../DoneBadge/DoneBadge";
 import AlertModal from "../AlertModal/AlertModal";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import { formatDate } from "@/lib/formatDate";
-import { shouldShowSolveBadge } from "@/lib/solveBadge";
-import createNewProblemClient from "@/app/apis/createNewProblem.client";
+import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
 
 type Props = {
   data: Problems[];
@@ -53,18 +52,7 @@ export default function Table({
     setConfirmingId(null);
   };
 
-  const createProblemMutation = useMutation({
-    mutationFn: () => createNewProblemClient(),
-    onSuccess: () => router.refresh(),
-  });
-
-  const handleCreateProblem = () => {
-    createProblemMutation.mutate();
-  };
-
-  const isPending =
-    acMutation.isPending ||
-    createProblemMutation.isPending;
+  const isPending = acMutation.isPending;
 
   return (
     <>
@@ -75,12 +63,6 @@ export default function Table({
           onClick={() => setOnlySolve((prev) => !prev)}
         >
           Solve!のみ
-        </button>
-
-        <button
-          onClick={handleCreateProblem}
-        >
-          create
         </button>
       </div>
 
@@ -97,7 +79,10 @@ export default function Table({
 
         <tbody>
           {filteredData.map((data) => (
-            <tr key={data.id}>
+            <tr
+              key={data.id}
+              className={isDone(data.ac_count) ? styles.doneRow : undefined}
+            >
               <td>
                 <div className={styles.titleWrapper}>
 
