@@ -5,6 +5,10 @@ import { CreateProblemInput } from "@/types";
 import BasicModal from "../BasicModal/BasicModal";
 import Button from "../Button/Button";
 import styles from "./createProblemModal.module.css";
+import { url } from "inspector";
+import { useQuery } from "@tanstack/react-query";
+import checkDuplicateClient from "@/app/apis/checkDuplicate.client";
+import FullScreenLoading from "../UI/FullScreenLoading";
 
 type Props = {
   open: boolean;
@@ -56,87 +60,113 @@ export default function CreateProblemModal({
     onClose();
   };
 
+  const {
+    data: duplicateResult,
+    refetch: checkDuplicate,
+    isFetching: isCheckDuplicateFetching,
+  } = useQuery({
+    queryKey: ["check-duplicate", form.url],
+    queryFn: () => checkDuplicateClient(form.url),
+    enabled: false,
+  });
+
+  const handleUrlBlur = () => {
+    if (form.url === "") {
+      return
+    }
+
+    checkDuplicate();
+  };
+
+  console.log("d = ", duplicateResult);
+
   return (
-    <BasicModal
-      open={open}
-      title="問題を追加する"
-      onClose={handleClose}
-    >
-      <form
-        className={styles.form}
-        onSubmit={handleSubmit}
+    <>
+      <BasicModal
+        open={open}
+        title="問題を追加する"
+        onClose={handleClose}
       >
-        <label className={styles.field}>
-          <span>プラットフォーム</span>
-          <select
-            required
-            value={form.platform}
-            onChange={handleChange("platform")}
-          >
-            {PLATFORMS.map((platform) => (
-              <option key={platform} value={platform}>
-                {platform}
-              </option>
-            ))}
-          </select>
-        </label>
+        <form
+          className={styles.form}
+          onSubmit={handleSubmit}
+        >
+          <label className={styles.field}>
+            <span>プラットフォーム</span>
+            <select
+              required
+              value={form.platform}
+              onChange={handleChange("platform")}
+            >
+              {PLATFORMS.map((platform) => (
+                <option key={platform} value={platform}>
+                  {platform}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <label className={styles.field}>
-          <span>URL</span>
-          <input
-            type="url"
-            required
-            value={form.url}
-            onChange={handleChange("url")}
-            placeholder="https://atcoder.jp/contests/abc123/tasks/abc123_a"
-          />
-        </label>
+          <label className={styles.field}>
+            <span>URL</span>
+            <input
+              type="url"
+              required
+              value={form.url}
+              onChange={handleChange("url")}
+              placeholder="https://atcoder.jp/contests/abc123/tasks/abc123_a"
+              onBlur={handleUrlBlur}
+            />
+          </label>
 
-        <label className={styles.field}>
-          <span>タイトル</span>
-          <input
-            type="text"
-            required
-            value={form.title}
-            onChange={handleChange("title")}
-          />
-        </label>
+          <label className={styles.field}>
+            <span>タイトル</span>
+            <input
+              type="text"
+              required
+              value={form.title}
+              onChange={handleChange("title")}
+            />
+          </label>
 
-        <label className={styles.field}>
-          <span>タグ（カンマ区切り）</span>
-          <input
-            type="text"
-            value={form.tags}
-            onChange={handleChange("tags")}
-            placeholder="dp, greedy"
-          />
-        </label>
+          <label className={styles.field}>
+            <span>タグ（カンマ区切り）</span>
+            <input
+              type="text"
+              value={form.tags}
+              onChange={handleChange("tags")}
+              placeholder="dp, greedy"
+            />
+          </label>
 
-        <label className={styles.field}>
-          <span>難易度</span>
-          <input
-            type="number"
-            required
-            value={form.difficulty}
-            onChange={handleChange("difficulty")}
-            placeholder="800"
-          />
-        </label>
+          <label className={styles.field}>
+            <span>難易度</span>
+            <input
+              type="number"
+              required
+              value={form.difficulty}
+              onChange={handleChange("difficulty")}
+              placeholder="800"
+            />
+          </label>
 
-        <div className={styles.footer}>
-          <Button
-            variant="secondary"
-            title="キャンセル"
-            onClick={handleClose}
-          />
+          <div className={styles.footer}>
+            <Button
+              variant="secondary"
+              title="キャンセル"
+              onClick={handleClose}
+            />
 
-          <Button
-            variant="primary"
-            title="追加する"
-            type="submit"
-          />
-        </div>
-      </form>
-    </BasicModal>
+            <Button
+              variant="primary"
+              title="追加する"
+              type="submit"
+              disabled={duplicateResult}
+            />
+          </div>
+        </form>
+      </BasicModal>
+
+      {isCheckDuplicateFetching && <FullScreenLoading />}
+    </>
   );
 }
