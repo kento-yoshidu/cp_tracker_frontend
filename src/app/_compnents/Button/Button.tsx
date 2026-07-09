@@ -5,6 +5,7 @@ type Props = {
   title: string;
   type?: "button" | "submit";
   onClick?: () => void;
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -12,12 +13,14 @@ export default function Button({
   title,
   type = "button",
   onClick,
+  disabled = false,
 }: Props) {
   return (
     <button
       type={type}
       className={`${styles.button} ${styles[variant]}`}
       onClick={onClick}
+      disabled={disabled}
     >
       {title}
     </button>
