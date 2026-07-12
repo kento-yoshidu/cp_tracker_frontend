@@ -8,9 +8,11 @@ import FullScreenLoading from "../UI/FullScreenLoading";
 import { useState } from "react";
 import CreateProblemModal from "../CreateProblemModal/CreateProblemModal";
 import { CreateProblemInput } from "@/types";
+import useAuth from "@/hooks/useAuth";
 
 export default function Header() {
   const router = useRouter();
+  const isLoggedIn = useAuth();
   const isLocalDev = process.env.NODE_ENV === "development";
   const isTargetingProductionBackend = !process.env.NEXT_PUBLIC_API_URL?.includes("localhost");
   const showProductionBadge = isLocalDev && isTargetingProductionBackend;
@@ -32,6 +34,10 @@ export default function Header() {
       <div className={styles.actions}>
         {showProductionBadge && (
           <span className={styles.productionBadge}>本番環境</span>
+        )}
+
+        {isLoggedIn && (
+          <span className={styles.loggedInBadge}>ログイン中</span>
         )}
 
         <button
