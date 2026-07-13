@@ -4,10 +4,14 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
+  const cookie = req.headers.get("cookie");
 
   const res = await fetch(`${BASE_URL}/problems`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(cookie ? { cookie } : {}),
+    },
     body: JSON.stringify(body),
   });
 
