@@ -37,16 +37,19 @@ export default function Header() {
         )}
 
         {isLoggedIn && (
-          <span className={styles.loggedInBadge}>ログイン中</span>
+          <>
+            <span className={styles.loggedInBadge}>ログイン中</span>
+
+            <button
+              type="button"
+              className={styles.addButton}
+              onClick={() => setIsOpenCreateProblemModal(true)}
+            >
+              問題を追加する
+            </button>
+          </>
         )}
 
-        <button
-          type="button"
-          className={styles.addButton}
-          onClick={() => setIsOpenCreateProblemModal(true)}
-        >
-          問題を追加する
-        </button>
       </div>
 
       {createProblemMutation.isPending && <FullScreenLoading />}

@@ -94,6 +94,10 @@
     width: 480px;
   }
 
+  td:has(.acCount) {
+    width: 100px;
+  }
+
   .titleWrapper {
     display: flex;
     justify-content: space-between;
@@ -123,8 +127,8 @@
 
   .acCount {
     display: flex;
-    justify-content: space-around;
     align-items: center;
+    gap: 16px;
 
     p {
       font-weight: 700;
