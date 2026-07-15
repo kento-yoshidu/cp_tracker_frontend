@@ -15,6 +15,7 @@ import AlertModal from "../AlertModal/AlertModal";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import { formatDate } from "@/lib/formatDate";
 import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
+import useAuth from "@/hooks/useAuth";
 
 type Props = {
   data: Problems[];
@@ -24,6 +25,7 @@ export default function Table({
   data,
 }: Props) {
   const router = useRouter();
+  const isLoggedIn = useAuth();
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
   const [onlySolve, setOnlySolve] = useState(false);
 
@@ -72,7 +74,7 @@ export default function Table({
           <tr>
             <th>問題</th>
             <th>タグ</th>
-            <th>ACカウント</th>
+            <th>AC<br />カウント</th>
             <th>最終AC日</th>
           </tr>
         </thead>
@@ -117,16 +119,17 @@ export default function Table({
 
               <td>
                 <div className={styles.acCount}>
-                <p>{data.ac_count}</p>
+                  <p>{data.ac_count}</p>
 
-                <button
-                  type="button"
-                  className={styles.acButton}
-                  onClick={() => handlerAc(data.id)}
-                >
-                  +1
-                </button>
-
+                  {isLoggedIn && (
+                    <button
+                      type="button"
+                      className={styles.acButton}
+                      onClick={() => handlerAc(data.id)}
+                    >
+                      +1
+                    </button>
+                  )}
                 </div>
               </td>
 

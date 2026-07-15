@@ -78,8 +78,6 @@ export default function CreateProblemModal({
     checkDuplicate();
   };
 
-  console.log("d = ", duplicateResult);
-
   return (
     <>
       <BasicModal
