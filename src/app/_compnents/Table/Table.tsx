@@ -15,28 +15,51 @@ import AlertModal from "../AlertModal/AlertModal";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import { formatDate } from "@/lib/formatDate";
 import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
-import useAuth from "@/hooks/useAuth";
+import SnackBar from "../SnackBar/SnackBar";
 
 type Props = {
   data: Problems[];
+  now: number;
+  isLoggedIn: boolean;
 };
 
 export default function Table({
   data,
+  now,
+  isLoggedIn,
 }: Props) {
   const router = useRouter();
-  const isLoggedIn = useAuth();
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
   const [onlySolve, setOnlySolve] = useState(false);
 
+  const [snackBar, setSnackBar] = useState<{
+    isOpen: boolean;
+    title: string;
+    variant: "success" | "error";
+  }>({
+    isOpen: false,
+    title: "",
+    variant: "success",
+  });
+
   const filteredData = data.filter((d) => {
-    if (onlySolve && !shouldShowSolveBadge(d.ac_count, d.last_solved_at)) return false;
+    if (onlySolve && !shouldShowSolveBadge(d.ac_count, d.last_solved_at, now)) {
+      return false;
+    }
+
     return true;
   });
 
   const acMutation = useMutation({
     mutationFn: (id: string) => updateAcCountClient(id),
-    onSuccess: () => router.refresh(),
+    onSuccess: () => {
+      router.refresh();
+      setSnackBar({
+        isOpen: true,
+        title: "+1しました",
+        variant: "success",
+      });
+    },
   });
 
   const handlerAc = (id: string) => {
@@ -100,6 +123,7 @@ export default function Table({
                   <SolveBadge
                     acCount={data.ac_count}
                     lastSolvedAt={data.last_solved_at}
+                    now={now}
                   />
 
                   <DoneBadge acCount={data.ac_count} />
@@ -149,6 +173,13 @@ export default function Table({
           onClose={handleCancelAc}
         />
       )}
+
+      <SnackBar
+        title={snackBar.title}
+        variant={snackBar.variant}
+        isOpen={snackBar.isOpen}
+        onClose={() => setSnackBar((prev) => ({ ...prev, isOpen: false }))}
+      />
     </>
   )
 }
