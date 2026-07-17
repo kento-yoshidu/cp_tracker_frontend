@@ -2,6 +2,10 @@
   --max-width: 1200px;
   --color-primary: #1d4ed8;
   --color-primary-rgb: 29, 78, 216;
+  --color-success: #16a34a;
+  --color-success-rgb: 22, 163, 74;
+  --color-error: #dc2626;
+  --color-error-rgb: 220, 38, 38;
 }
 
 * {

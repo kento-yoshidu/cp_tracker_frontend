@@ -1,19 +1,20 @@
 "use client";
 
 import { SubmitEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { CreateProblemInput } from "@/types";
 import BasicModal from "../BasicModal/BasicModal";
 import Button from "../Button/Button";
 import styles from "./createProblemModal.module.css";
-import { url } from "inspector";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import checkDuplicateClient from "@/app/apis/checkDuplicate.client";
+import createNewProblemClient from "@/app/apis/createNewProblem.client";
 import FullScreenLoading from "../UI/FullScreenLoading";
+import SnackBar from "../SnackBar/SnackBar";
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  onSubmit: (input: CreateProblemInput) => void;
 };
 
 const PLATFORMS = ["AtCoder", "AOJ"] as const;
@@ -29,19 +30,38 @@ const initialForm = {
 export default function CreateProblemModal({
   open,
   onClose,
-  onSubmit,
 }: Props) {
+  const router = useRouter();
   const [form, setForm] = useState(initialForm);
+
+  const [snackBar, setSnackBar] = useState<{
+    isOpen: boolean;
+    title: string;
+    variant: "success" | "error";
+  }>({
+    isOpen: false,
+    title: "",
+    variant: "success",
+  });
 
   const handleChange = (key: keyof typeof initialForm) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
     };
 
+  const createProblemMutation = useMutation({
+    mutationFn: (input: CreateProblemInput) => createNewProblemClient(input),
+    onSuccess: () => {
+      onClose();
+      router.refresh();
+      setSnackBar({ isOpen: true, title: "問題を登録しました", variant: "success" });
+    },
+  });
+
   const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    onSubmit({
+    createProblemMutation.mutate({
       platform: form.platform,
       url: form.url,
       title: form.title,
@@ -164,7 +184,14 @@ export default function CreateProblemModal({
         </form>
       </BasicModal>
 
-      {isCheckDuplicateFetching && <FullScreenLoading />}
+      {(isCheckDuplicateFetching || createProblemMutation.isPending) && <FullScreenLoading />}
+
+      <SnackBar
+        title={snackBar.title}
+        variant={snackBar.variant}
+        isOpen={snackBar.isOpen}
+        onClose={() => setSnackBar((prev) => ({ ...prev, isOpen: false }))}
+      />
     </>
   );
 }
