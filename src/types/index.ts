@@ -16,3 +16,5 @@ export type CreateProblemInput = {
   tags: string[];
   difficulty: number;
 };
+
+export type UpdateProblemInput = CreateProblemInput;
