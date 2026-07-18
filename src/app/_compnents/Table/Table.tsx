@@ -5,6 +5,7 @@ import { Problems } from "@/types"
 import Link from "next/link";
 import styles from "./table.module.css";
 import updateAcCountClient from "@/app/apis/updateAcCount.client";
+import deleteProblemClient from "@/app/apis/deleteProblem.client";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import FullScreenLoading from "../UI/FullScreenLoading";
@@ -16,6 +17,8 @@ import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import { formatDate } from "@/lib/formatDate";
 import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
 import SnackBar from "../SnackBar/SnackBar";
+import RowMenu from "../RowMenu/RowMenu";
+import EditProblemModal from "../EditProblemModal/EditProblemModal";
 
 type Props = {
   data: Problems[];
@@ -30,6 +33,8 @@ export default function Table({
 }: Props) {
   const router = useRouter();
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingProblem, setEditingProblem] = useState<Problems | null>(null);
   const [onlySolve, setOnlySolve] = useState(false);
 
   const [snackBar, setSnackBar] = useState<{
@@ -77,7 +82,34 @@ export default function Table({
     setConfirmingId(null);
   };
 
-  const isPending = acMutation.isPending;
+  const deleteProblemMutation = useMutation({
+    mutationFn: (id: string) => deleteProblemClient(id),
+    onSuccess: () => {
+      router.refresh();
+      setSnackBar({
+        isOpen: true,
+        title: "削除しました",
+        variant: "success",
+      });
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    setDeletingId(id);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingId === null) return;
+
+    deleteProblemMutation.mutate(deletingId);
+    setDeletingId(null);
+  };
+
+  const handleCancelDelete = () => {
+    setDeletingId(null);
+  };
+
+  const isPending = acMutation.isPending || deleteProblemMutation.isPending;
 
   return (
     <>
@@ -99,6 +131,7 @@ export default function Table({
             <th>タグ</th>
             <th>AC<br />カウント</th>
             <th>最終AC日</th>
+            <th></th>
           </tr>
         </thead>
 
@@ -157,7 +190,21 @@ export default function Table({
                 </div>
               </td>
 
-              <td>{data.last_solved_at ? formatDate(data.last_solved_at) : "-"}</td>
+              <td>
+                <p className={styles.createdAt}>
+                  {data.last_solved_at ? formatDate(data.last_solved_at) : "-"}
+                </p>
+              </td>
+
+              <td>
+                {isLoggedIn && (
+                  <RowMenu
+                    row={data}
+                    onEdit={setEditingProblem}
+                    onDelete={handleDelete}
+                  />
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -171,6 +218,22 @@ export default function Table({
           title="ACカウントを+1します。よろしいですか?"
           onClick={handleConfirmAc}
           onClose={handleCancelAc}
+        />
+      )}
+
+      {deletingId !== null && (
+        <AlertModal
+          title="この問題を削除します。よろしいですか?"
+          onClick={handleConfirmDelete}
+          onClose={handleCancelDelete}
+        />
+      )}
+
+      {editingProblem && (
+        <EditProblemModal
+          key={editingProblem.id}
+          problem={editingProblem}
+          onClose={() => setEditingProblem(null)}
         />
       )}
 
