@@ -4,11 +4,18 @@ import styles from "./header.module.css";
 import { useState } from "react";
 import CreateProblemModal from "../CreateProblemModal/CreateProblemModal";
 
-type Props = {
-  isLoggedIn: boolean;
+type AcRate = {
+  rate: number;
+  numerator: number;
+  denominator: number;
 };
 
-export default function Header({ isLoggedIn }: Props) {
+type Props = {
+  isLoggedIn: boolean;
+  acRate: AcRate;
+};
+
+export default function Header({ isLoggedIn, acRate }: Props) {
   const isLocalDev = process.env.NODE_ENV === "development";
   const isTargetingProductionBackend = !process.env.NEXT_PUBLIC_API_URL?.includes("localhost");
   const showProductionBadge = isLocalDev && isTargetingProductionBackend;
@@ -20,6 +27,10 @@ export default function Header({ isLoggedIn }: Props) {
       <h1 className={styles.title}>CP Tracker</h1>
 
       <div className={styles.actions}>
+        <span className={styles.acRate}>
+          AC率 {acRate.rate.toFixed(1)}% ({acRate.numerator}/{acRate.denominator})
+        </span>
+
         {showProductionBadge && (
           <span className={styles.productionBadge}>本番環境</span>
         )}
