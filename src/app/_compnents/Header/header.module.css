@@ -29,6 +29,13 @@
     gap: 16px;
   }
 
+  .acRate {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.02em;
+  }
+
   .productionBadge {
     padding: 4px 14px;
     border: 1px solid #ff1744;
