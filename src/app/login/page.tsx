@@ -13,6 +13,7 @@ export default function Page() {
     await loginClient(username, password);
 
     router.push("/");
+    router.refresh();
   };
 
   return (
