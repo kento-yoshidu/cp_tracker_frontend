@@ -31,8 +31,10 @@ export default function Header({ isLoggedIn, acRate }: Props) {
           AC率 {acRate.rate.toFixed(1)}% ({acRate.numerator}/{acRate.denominator})
         </span>
 
-        {showProductionBadge && (
-          <span className={styles.productionBadge}>本番環境</span>
+        {showProductionBadge ? (
+          <span className={styles.productionBadge}>本番データ</span>
+        ) : (
+          <span className={styles.loggedInBadge}>ローカルデータ</span>
         )}
 
         {isLoggedIn && (
