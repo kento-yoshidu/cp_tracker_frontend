@@ -5,6 +5,7 @@ import meServer from "./apis/me.server";
 import fetchProblemsServer from "./apis/fetchProblems.servre";
 import type { Problems } from "@/types";
 import "./globals.css";
+import Footer from "./_compnents/Footer/Footer";
 
 function calcAcRate(problems: Problems[]) {
   const denominator = problems.length * 5;
@@ -30,6 +31,7 @@ export default async function RootLayout({
           <div className={styles.wrapper}>
             <Header isLoggedIn={isLoggedIn} acRate={acRate} />
             {children}
+            <Footer />
           </div>
         </QueryProvider>
       </body>

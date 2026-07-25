@@ -198,11 +198,13 @@ export default function Table({
 
               <td>
                 {isLoggedIn && (
-                  <RowMenu
-                    row={data}
-                    onEdit={setEditingProblem}
-                    onDelete={handleDelete}
-                  />
+                  <div className={styles.menu}>
+                    <RowMenu
+                      row={data}
+                      onEdit={setEditingProblem}
+                      onDelete={handleDelete}
+                    />
+                  </div>
                 )}
               </td>
             </tr>
