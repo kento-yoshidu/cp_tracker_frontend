@@ -36,20 +36,11 @@ export default function Table({
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingProblem, setEditingProblem] = useState<Problems | null>(null);
-  const [onlySolve, setOnlySolve] = useState(false);
 
   const [snackBar, setSnackBar] = useState<SnackBarState>({
     isOpen: false,
     title: "",
     variant: "success",
-  });
-
-  const filteredData = data.filter((d) => {
-    if (onlySolve && !shouldShowSolveBadge(d.ac_count, d.last_solved_at, now)) {
-      return false;
-    }
-
-    return true;
   });
 
   const acMutation = useMutation({
@@ -110,10 +101,6 @@ export default function Table({
 
   return (
     <>
-      <Filter
-        onlySolve={onlySolve}
-        onClick={setOnlySolve}
-      />
       <div className={styles.tableWrapper}>
 
       <table className={styles.table}>
@@ -128,7 +115,7 @@ export default function Table({
         </thead>
 
         <tbody>
-          {filteredData.map((data) => (
+          {data.map((data) => (
             <tr
               key={data.id}
               className={isDone(data.ac_count) ? styles.doneRow : undefined}
