@@ -3,9 +3,9 @@ import QueryProvider from "./_compnents/QueryProvider";
 import styles from "./layout.module.css";
 import meServer from "./apis/me.server";
 import fetchProblemsServer from "./apis/fetchProblems.servre";
-import type { Problems } from "@/types";
-import "./globals.css";
 import Footer from "./_compnents/Footer/Footer";
+import "./globals.css";
+import type { Problems } from "@/types";
 
 function calcAcRate(problems: Problems[]) {
   const denominator = problems.length * 5;

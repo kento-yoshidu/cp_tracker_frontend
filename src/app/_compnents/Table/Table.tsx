@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Problems } from "@/types"
 import Link from "next/link";
 import styles from "./table.module.css";
 import updateAcCountClient from "@/app/apis/updateAcCount.client";
@@ -19,6 +18,8 @@ import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
 import SnackBar from "../SnackBar/SnackBar";
 import RowMenu from "../RowMenu/RowMenu";
 import EditProblemModal from "../EditProblemModal/EditProblemModal";
+import Filter from "../Filter/Filter";
+import type { Problems, SnackBarState } from "@/types"
 
 type Props = {
   data: Problems[];
@@ -37,11 +38,7 @@ export default function Table({
   const [editingProblem, setEditingProblem] = useState<Problems | null>(null);
   const [onlySolve, setOnlySolve] = useState(false);
 
-  const [snackBar, setSnackBar] = useState<{
-    isOpen: boolean;
-    title: string;
-    variant: "success" | "error";
-  }>({
+  const [snackBar, setSnackBar] = useState<SnackBarState>({
     isOpen: false,
     title: "",
     variant: "success",
@@ -113,17 +110,12 @@ export default function Table({
 
   return (
     <>
-      <div className={styles.filters}>
-        <button
-          type="button"
-          className={onlySolve ? `${styles.filterButton} ${styles.filterButtonActive}` : styles.filterButton}
-          onClick={() => setOnlySolve((prev) => !prev)}
-        >
-          Solve!のみ
-        </button>
-      </div>
-
+      <Filter
+        onlySolve={onlySolve}
+        onClick={setOnlySolve}
+      />
       <div className={styles.tableWrapper}>
+
       <table className={styles.table}>
         <thead>
           <tr>
