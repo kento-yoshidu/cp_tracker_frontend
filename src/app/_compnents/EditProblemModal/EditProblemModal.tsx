@@ -9,7 +9,7 @@ import styles from "../CreateProblemModal/createProblemModal.module.css";
 import { useMutation } from "@tanstack/react-query";
 import updateProblemClient from "@/app/apis/updateProblem.client";
 import FullScreenLoading from "../UI/FullScreenLoading";
-import SnackBar from "../SnackBar/SnackBar";
+import SnackBar from "../UI/SnackBar";
 
 type Props = {
   problem: Problems;

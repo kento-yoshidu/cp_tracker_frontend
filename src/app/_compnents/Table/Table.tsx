@@ -9,16 +9,14 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import FullScreenLoading from "../UI/FullScreenLoading";
 import Tag from "../Tag/Tag";
-import SolveBadge from "../SolveBadge/SolveBadge";
-import DoneBadge from "../DoneBadge/DoneBadge";
 import AlertModal from "../AlertModal/AlertModal";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import { formatDate } from "@/lib/formatDate";
 import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
-import SnackBar from "../SnackBar/SnackBar";
+import SnackBar from "../UI/SnackBar";
 import RowMenu from "../RowMenu/RowMenu";
 import EditProblemModal from "../EditProblemModal/EditProblemModal";
-import Filter from "../Filter/Filter";
+import Badge from "../UI/Badge";
 import type { Problems, SnackBarState } from "@/types"
 
 type Props = {
@@ -132,13 +130,19 @@ export default function Table({
                     {data.title}
                   </Link>
 
-                  <SolveBadge
-                    acCount={data.ac_count}
-                    lastSolvedAt={data.last_solved_at}
-                    now={now}
-                  />
+                  {shouldShowSolveBadge(data.ac_count, data.last_solved_at, now) && (
+                    <Badge
+                      label="Solve!"
+                      variant="solve"
+                    />
+                  )}
 
-                  <DoneBadge acCount={data.ac_count} />
+                  {isDone(data.ac_count) && (
+                    <Badge
+                      label="Done"
+                      variant="done"
+                    />
+                  )}
                 </div>
               </td>
               <td>
