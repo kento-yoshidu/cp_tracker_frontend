@@ -18,3 +18,9 @@ export type CreateProblemInput = {
 };
 
 export type UpdateProblemInput = CreateProblemInput;
+
+export type SnackBarState = {
+  isOpen: boolean;
+  title: string;
+  variant: "success" | "error";
+};

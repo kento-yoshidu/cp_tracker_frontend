@@ -47,6 +47,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   sorting:        { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   sort:           { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   配列インデックス:     { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  辞書順比較:         { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
 
   // 数学
   math:            { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
@@ -54,6 +55,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   bit:             { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   geometry:        { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   bit全探索:         { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  順列:         { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
 
   // 文字列
   文字列:          { bg: "linear-gradient(135deg, #c2410c, #b91c1c)", text: "#fff" },
