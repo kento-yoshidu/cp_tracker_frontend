@@ -9,16 +9,14 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import FullScreenLoading from "../UI/FullScreenLoading";
 import Tag from "../Tag/Tag";
-import SolveBadge from "../SolveBadge/SolveBadge";
-import DoneBadge from "../DoneBadge/DoneBadge";
 import AlertModal from "../AlertModal/AlertModal";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import { formatDate } from "@/lib/formatDate";
 import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
-import SnackBar from "../SnackBar/SnackBar";
+import SnackBar from "../UI/SnackBar";
 import RowMenu from "../RowMenu/RowMenu";
 import EditProblemModal from "../EditProblemModal/EditProblemModal";
-import Filter from "../Filter/Filter";
+import Badge from "../UI/Badge";
 import type { Problems, SnackBarState } from "@/types"
 
 type Props = {
@@ -36,20 +34,11 @@ export default function Table({
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingProblem, setEditingProblem] = useState<Problems | null>(null);
-  const [onlySolve, setOnlySolve] = useState(false);
 
   const [snackBar, setSnackBar] = useState<SnackBarState>({
     isOpen: false,
     title: "",
     variant: "success",
-  });
-
-  const filteredData = data.filter((d) => {
-    if (onlySolve && !shouldShowSolveBadge(d.ac_count, d.last_solved_at, now)) {
-      return false;
-    }
-
-    return true;
   });
 
   const acMutation = useMutation({
@@ -110,10 +99,6 @@ export default function Table({
 
   return (
     <>
-      <Filter
-        onlySolve={onlySolve}
-        onClick={setOnlySolve}
-      />
       <div className={styles.tableWrapper}>
 
       <table className={styles.table}>
@@ -128,7 +113,7 @@ export default function Table({
         </thead>
 
         <tbody>
-          {filteredData.map((data) => (
+          {data.map((data) => (
             <tr
               key={data.id}
               className={isDone(data.ac_count) ? styles.doneRow : undefined}
@@ -145,13 +130,19 @@ export default function Table({
                     {data.title}
                   </Link>
 
-                  <SolveBadge
-                    acCount={data.ac_count}
-                    lastSolvedAt={data.last_solved_at}
-                    now={now}
-                  />
+                  {shouldShowSolveBadge(data.ac_count, data.last_solved_at, now) && (
+                    <Badge
+                      label="Solve!"
+                      variant="solve"
+                    />
+                  )}
 
-                  <DoneBadge acCount={data.ac_count} />
+                  {isDone(data.ac_count) && (
+                    <Badge
+                      label="Done"
+                      variant="done"
+                    />
+                  )}
                 </div>
               </td>
               <td>

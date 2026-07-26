@@ -10,7 +10,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import checkDuplicateClient from "@/app/apis/checkDuplicate.client";
 import createNewProblemClient from "@/app/apis/createNewProblem.client";
 import FullScreenLoading from "../UI/FullScreenLoading";
-import SnackBar from "../SnackBar/SnackBar";
+import SnackBar from "../UI/SnackBar";
 
 type Props = {
   open: boolean;
