@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Link from "next/link";
 import styles from "./table.module.css";
 import updateAcCountClient from "@/app/apis/updateAcCount.client";
@@ -23,12 +23,14 @@ type Props = {
   data: Problems[];
   now: number;
   isLoggedIn: boolean;
+  setSelectedTag: Dispatch<SetStateAction<string | null>>;
 };
 
 export default function Table({
   data,
   now,
   isLoggedIn,
+  setSelectedTag,
 }: Props) {
   const router = useRouter();
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
@@ -151,6 +153,7 @@ export default function Table({
                     <Tag
                       key={`tag-${tag}`}
                       tagName={tag}
+                      onClick={() => setSelectedTag(tag)}
                     />
                   ))}
 
