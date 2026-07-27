@@ -19,8 +19,14 @@ export default function Contents({
 }: Props) {
   const [onlySolve, setOnlySolve] = useState(false);
 
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
   const filteredData = data.filter((d) => {
     if (onlySolve && !shouldShowSolveBadge(d.ac_count, d.last_solved_at, now)) {
+      return false;
+    }
+
+    if (selectedTag && !d.tags.includes(selectedTag)) {
       return false;
     }
 
@@ -32,12 +38,15 @@ export default function Contents({
       <Filter
         onlySolve={onlySolve}
         onClick={setOnlySolve}
+        selectedTag={selectedTag}
+        setSelectedTag={setSelectedTag}
       />
 
       <Table
         data={filteredData}
         now={now}
         isLoggedIn={isLoggedIn}
+        setSelectedTag={setSelectedTag}
       />
     </>
   );
