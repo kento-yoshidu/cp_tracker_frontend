@@ -1,4 +1,4 @@
-export type Problems = {
+export type Problem = {
   id: string;
   platform: string;
   title: string;
@@ -7,6 +7,12 @@ export type Problems = {
   difficulty?: number;
   ac_count: number;
   last_solved_at: string;
+};
+
+export type Activity = {
+  date: string;
+  ac_count: number;
+  max_difficulty: number;
 };
 
 export type CreateProblemInput = {

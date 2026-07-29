@@ -17,10 +17,10 @@ import SnackBar from "../UI/SnackBar";
 import RowMenu from "../RowMenu/RowMenu";
 import EditProblemModal from "../EditProblemModal/EditProblemModal";
 import Badge from "../UI/Badge";
-import type { Problems, SnackBarState } from "@/types"
+import type { Problem, SnackBarState } from "@/types"
 
 type Props = {
-  data: Problems[];
+  data: Problem[];
   now: number;
   isLoggedIn: boolean;
   setSelectedTag: Dispatch<SetStateAction<string | null>>;
@@ -35,7 +35,7 @@ export default function Table({
   const router = useRouter();
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [editingProblem, setEditingProblem] = useState<Problems | null>(null);
+  const [editingProblem, setEditingProblem] = useState<Problem | null>(null);
 
   const [snackBar, setSnackBar] = useState<SnackBarState>({
     isOpen: false,
