@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Problems } from "@/types";
 import styles from "./rowMenu.module.css";
+import type { Problem } from "@/types";
 
 type Props = {
-  row: Problems;
-  onEdit: (row: Problems) => void;
+  row: Problem;
+  onEdit: (row: Problem) => void;
   onDelete: (id: string) => void;
 };
 

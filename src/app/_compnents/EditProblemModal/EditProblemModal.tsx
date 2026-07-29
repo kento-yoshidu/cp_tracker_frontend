@@ -2,7 +2,6 @@
 
 import { SubmitEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Problems, UpdateProblemInput } from "@/types";
 import BasicModal from "../BasicModal/BasicModal";
 import Button from "../Button/Button";
 import styles from "../CreateProblemModal/createProblemModal.module.css";
@@ -10,9 +9,10 @@ import { useMutation } from "@tanstack/react-query";
 import updateProblemClient from "@/app/apis/updateProblem.client";
 import FullScreenLoading from "../UI/FullScreenLoading";
 import SnackBar from "../UI/SnackBar";
+import type { Problem, UpdateProblemInput } from "@/types";
 
 type Props = {
-  problem: Problems;
+  problem: Problem;
   onClose: () => void;
 };
 

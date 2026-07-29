@@ -5,9 +5,9 @@ import meServer from "./apis/me.server";
 import fetchProblemsServer from "./apis/fetchProblems.servre";
 import Footer from "./_compnents/Footer/Footer";
 import "./globals.css";
-import type { Problems } from "@/types";
+import type { Problem } from "@/types";
 
-function calcAcRate(problems: Problems[]) {
+function calcAcRate(problems: Problem[]) {
   const denominator = problems.length * 5;
   const numerator = problems.reduce((sum, p) => sum + Math.min(5, p.ac_count), 0);
   const rate = denominator === 0 ? 0 : (numerator / denominator) * 100;

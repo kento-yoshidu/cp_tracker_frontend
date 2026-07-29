@@ -2,18 +2,20 @@
 
 import { useState } from "react";
 import Table from "./Table/Table";
-import { Problems } from "@/types";
 import { shouldShowSolveBadge } from "@/lib/solveBadge";
 import Filter from "./Filter/Filter";
+import type { Activity, Problem } from "@/types";
 
 type Props = {
-  data: Problems[];
+  problems: Problem[];
+  activities: Activity[];
   now: number;
   isLoggedIn: boolean;
 };
 
 export default function Contents({
-  data,
+  problems,
+  activities,
   now,
   isLoggedIn,
 }: Props) {
@@ -21,17 +23,19 @@ export default function Contents({
 
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
-  const filteredData = data.filter((d) => {
-    if (onlySolve && !shouldShowSolveBadge(d.ac_count, d.last_solved_at, now)) {
+  const filteredData = problems.filter((problem) => {
+    if (onlySolve && !shouldShowSolveBadge(problem.ac_count, problem.last_solved_at, now)) {
       return false;
     }
 
-    if (selectedTag && !d.tags.includes(selectedTag)) {
+    if (selectedTag && !problem.tags.includes(selectedTag)) {
       return false;
     }
 
     return true;
   });
+
+  console.log("activities = ", activities);
 
   return (
     <>
