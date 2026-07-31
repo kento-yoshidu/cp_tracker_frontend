@@ -1,16 +1,13 @@
 import { getTagColor } from "@/lib/tagColors";
 import styles from "./tag.module.css";
-import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   tagName: string;
-  // setSelectedTag: Dispatch<SetStateAction<string | null>>;
   onClick: () => void;
 };
 
 export default function Tag({
   tagName,
-  // setSelectedTag,
   onClick,
 }: Props) {
   const { bg, text } = getTagColor(tagName);

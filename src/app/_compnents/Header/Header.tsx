@@ -26,33 +26,37 @@ export default function Header({ isLoggedIn, acRate }: Props) {
     <header className={styles.header}>
       <h1 className={styles.title}>CP Tracker</h1>
 
-      <div className={styles.actions}>
-        <span className={styles.acRate}>
-          AC率 {acRate.rate.toFixed(1)}% ({acRate.numerator}/{acRate.denominator})
-        </span>
+      {isLoggedIn && (
+        <>
+          <div className={styles.actions}>
+            <span className={styles.acRate}>
+              AC率 {acRate.rate.toFixed(1)}% ({acRate.numerator}/{acRate.denominator})
+            </span>
 
-        {showProductionBadge && <span className={styles.productionBadge}>本番データ</span>}
+            {showProductionBadge && <span className={styles.productionBadge}>本番データ</span>}
 
-        {isLoggedIn && (
-          <>
-            <span className={styles.loggedInBadge}>ログイン中</span>
+            {isLoggedIn && (
+              <>
+                <span className={styles.loggedInBadge}>ログイン中</span>
 
-            <button
-              type="button"
-              className={styles.addButton}
-              onClick={() => setIsOpenCreateProblemModal(true)}
-            >
-              問題を追加する
-            </button>
-          </>
-        )}
+                <button
+                  type="button"
+                  className={styles.addButton}
+                  onClick={() => setIsOpenCreateProblemModal(true)}
+                >
+                  問題を追加する
+                </button>
+              </>
+            )}
 
-      </div>
+          </div>
 
-      <CreateProblemModal
-        open={isOpenCreateProblemModal}
-        onClose={() => setIsOpenCreateProblemModal(false)}
-      />
+          <CreateProblemModal
+            open={isOpenCreateProblemModal}
+            onClose={() => setIsOpenCreateProblemModal(false)}
+          />
+        </>
+      )}
     </header>
   );
 }

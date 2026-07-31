@@ -21,14 +21,14 @@ export default function Contents({
 }: Props) {
   const [onlySolve, setOnlySolve] = useState(false);
 
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const filteredData = problems.filter((problem) => {
     if (onlySolve && !shouldShowSolveBadge(problem.ac_count, problem.last_solved_at, now)) {
       return false;
     }
 
-    if (selectedTag && !problem.tags.includes(selectedTag)) {
+    if (!selectedTags.every((tag) => problem.tags.includes(tag))) {
       return false;
     }
 
@@ -40,17 +40,18 @@ export default function Contents({
   return (
     <>
       <Filter
+        isLoggedIn={isLoggedIn}
         onlySolve={onlySolve}
         onClick={setOnlySolve}
-        selectedTag={selectedTag}
-        setSelectedTag={setSelectedTag}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
       />
 
       <Table
         data={filteredData}
         now={now}
         isLoggedIn={isLoggedIn}
-        setSelectedTag={setSelectedTag}
+        setSelectedTags={setSelectedTags}
       />
     </>
   );
