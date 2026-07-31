@@ -1,10 +1,10 @@
+import "./globals.css";
 import Header from "./_compnents/Header/Header";
 import QueryProvider from "./_compnents/QueryProvider";
-import styles from "./layout.module.css";
 import meServer from "./apis/me.server";
 import fetchProblemsServer from "./apis/fetchProblems.servre";
 import Footer from "./_compnents/Footer/Footer";
-import "./globals.css";
+import styles from "./layout.module.css";
 import type { Problem } from "@/types";
 
 function calcAcRate(problems: Problem[]) {
@@ -30,7 +30,9 @@ export default async function RootLayout({
         <QueryProvider>
           <div className={styles.wrapper}>
             <Header isLoggedIn={isLoggedIn} acRate={acRate} />
+
             {children}
+
             <Footer />
           </div>
         </QueryProvider>

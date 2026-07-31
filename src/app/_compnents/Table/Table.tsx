@@ -23,14 +23,14 @@ type Props = {
   data: Problem[];
   now: number;
   isLoggedIn: boolean;
-  setSelectedTag: Dispatch<SetStateAction<string | null>>;
+  setSelectedTags: Dispatch<SetStateAction<string[]>>;
 };
 
 export default function Table({
   data,
   now,
   isLoggedIn,
-  setSelectedTag,
+  setSelectedTags,
 }: Props) {
   const router = useRouter();
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
@@ -108,9 +108,13 @@ export default function Table({
           <tr>
             <th>問題</th>
             <th>タグ</th>
-            <th>AC<br />カウント</th>
-            <th>最終AC日</th>
-            <th></th>
+            {isLoggedIn && (
+              <>
+                <th>AC<br />カウント</th>
+                <th>最終AC日</th>
+                <th></th>
+              </>
+            )}
           </tr>
         </thead>
 
@@ -132,18 +136,22 @@ export default function Table({
                     {data.title}
                   </Link>
 
-                  {shouldShowSolveBadge(data.ac_count, data.last_solved_at, now) && (
-                    <Badge
-                      label="Solve!"
-                      variant="solve"
-                    />
-                  )}
+                  {isLoggedIn && (
+                    <>
+                      {shouldShowSolveBadge(data.ac_count, data.last_solved_at, now) && (
+                        <Badge
+                          label="Solve!"
+                          variant="solve"
+                        />
+                      )}
 
-                  {isDone(data.ac_count) && (
-                    <Badge
-                      label="Done"
-                      variant="done"
-                    />
+                      {isDone(data.ac_count) && (
+                        <Badge
+                          label="Done"
+                          variant="done"
+                        />
+                      )}
+                    </>
                   )}
                 </div>
               </td>
@@ -153,46 +161,49 @@ export default function Table({
                     <Tag
                       key={`tag-${tag}`}
                       tagName={tag}
-                      onClick={() => setSelectedTag(tag)}
+                      onClick={() => setSelectedTags((prev) =>
+                        prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+                      )}
                     />
                   ))}
-
                 </div>
               </td>
 
-              <td>
-                <div className={styles.acCount}>
-                  <p>{data.ac_count}</p>
+              {isLoggedIn && (
+                <>
+                  <td>
+                    <div className={styles.acCount}>
+                      <p>{data.ac_count}</p>
 
-                  {isLoggedIn && (
-                    <button
-                      type="button"
-                      className={styles.acButton}
-                      onClick={() => handlerAc(data.id)}
-                    >
-                      +1
-                    </button>
-                  )}
-                </div>
-              </td>
+                      {isLoggedIn && (
+                        <button
+                          type="button"
+                          className={styles.acButton}
+                          onClick={() => handlerAc(data.id)}
+                        >
+                          +1
+                        </button>
+                      )}
+                    </div>
+                  </td>
 
-              <td>
-                <p className={styles.createdAt}>
-                  {data.last_solved_at ? formatDate(data.last_solved_at) : "-"}
-                </p>
-              </td>
+                  <td>
+                    <p className={styles.createdAt}>
+                      {data.last_solved_at ? formatDate(data.last_solved_at) : "-"}
+                    </p>
+                  </td>
 
-              <td>
-                {isLoggedIn && (
-                  <div className={styles.menu}>
-                    <RowMenu
-                      row={data}
-                      onEdit={setEditingProblem}
-                      onDelete={handleDelete}
-                    />
-                  </div>
-                )}
-              </td>
+                  <td>
+                    <div className={styles.menu}>
+                      <RowMenu
+                        row={data}
+                        onEdit={setEditingProblem}
+                        onDelete={handleDelete}
+                      />
+                    </div>
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>
