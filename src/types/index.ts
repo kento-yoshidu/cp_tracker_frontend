@@ -15,6 +15,16 @@ export type Activity = {
   max_difficulty: number;
 };
 
+export type Archives = {
+  id: string;
+  platform: string;
+  title: string;
+  url: string;
+  tags: string[];
+  difficulty?: number;
+  archived_at: string;
+};
+
 export type CreateProblemInput = {
   platform: string;
   url: string;

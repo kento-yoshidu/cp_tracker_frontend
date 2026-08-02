@@ -1,6 +1,5 @@
+import { BASE_URL } from "@/constants/constants";
 import { cookies } from "next/headers";
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default async function meServer(): Promise<boolean> {
   const cookieStore = await cookies();

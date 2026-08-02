@@ -4,10 +4,13 @@ import meServer from "./apis/me.server";
 import nowServer from "@/lib/now.server";
 import Contents from "./_compnents/Contents";
 import fetchActivities from "./apis/fetchActivities.client";
+import { FetchStrategy } from "next/dist/client/components/segment-cache/types";
+import fetchArchives from "./apis/fetchArchives";
 
 export default async function Home() {
   const problems = await fetchProblemsServer();
   const activities = await fetchActivities();
+  const archives = await fetchArchives();
 
   const now = nowServer();
   const isLoggedIn = await meServer();
@@ -16,6 +19,7 @@ export default async function Home() {
     <Contents
       problems={problems}
       activities={activities}
+      archives={archives}
       now={now}
       isLoggedIn={isLoggedIn}
     />

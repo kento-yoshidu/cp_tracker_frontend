@@ -1,6 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { BASE_URL } from "@/constants/constants";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const cookie = req.headers.get("cookie");
