@@ -4,11 +4,12 @@ import { useState } from "react";
 import Table from "./Table/Table";
 import { shouldShowSolveBadge } from "@/lib/solveBadge";
 import Filter from "./Filter/Filter";
-import type { Activity, Problem } from "@/types";
+import type { Activity, Archives, Problem } from "@/types";
 
 type Props = {
   problems: Problem[];
   activities: Activity[];
+  archives: Archives[];
   now: number;
   isLoggedIn: boolean;
 };
@@ -16,9 +17,13 @@ type Props = {
 export default function Contents({
   problems,
   activities,
+  archives,
   now,
   isLoggedIn,
 }: Props) {
+  console.log("activities = ", activities);
+  console.log("archives = ", archives);
+
   const [onlySolve, setOnlySolve] = useState(false);
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -34,8 +39,6 @@ export default function Contents({
 
     return true;
   });
-
-  console.log("activities = ", activities);
 
   return (
     <>

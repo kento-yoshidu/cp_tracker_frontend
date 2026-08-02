@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { BASE_URL } from "@/constants/constants";
 
 export async function apiFetch(path: string) {
     const res = await fetch(`${BASE_URL}/${path}`, {

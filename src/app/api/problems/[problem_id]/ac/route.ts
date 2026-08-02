@@ -1,6 +1,5 @@
+import { BASE_URL } from "@/constants/constants";
 import type { NextRequest } from "next/server";
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function POST(
   req: NextRequest,
