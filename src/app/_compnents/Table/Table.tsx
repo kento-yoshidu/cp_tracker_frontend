@@ -18,6 +18,7 @@ import RowMenu from "../RowMenu/RowMenu";
 import EditProblemModal from "../EditProblemModal/EditProblemModal";
 import Badge from "../UI/Badge";
 import type { Problem, SnackBarState } from "@/types"
+import archiveClient from "@/app/apis/archive.client";
 
 type Props = {
   data: Problem[];
@@ -55,6 +56,18 @@ export default function Table({
     },
   });
 
+  const archiveMutation = useMutation({
+    mutationFn: (id: string) => archiveClient(id),
+    onSuccess: () => {
+      router.refresh();
+      setSnackBar({
+        isOpen: true,
+        title: "アーカイブしました",
+        variant: "success",
+      });
+    },
+  });
+
   const handlerAc = (id: string) => {
     setConfirmingId(id);
   };
@@ -64,6 +77,10 @@ export default function Table({
 
     acMutation.mutate(confirmingId);
     setConfirmingId(null);
+  };
+
+  const handleArchive = (id: string) => {
+    archiveMutation.mutate(id);
   };
 
   const handleCancelAc = () => {
@@ -199,6 +216,7 @@ export default function Table({
                         row={data}
                         onEdit={setEditingProblem}
                         onDelete={handleDelete}
+                        onArchive={handleArchive}
                       />
                     </div>
                   </td>

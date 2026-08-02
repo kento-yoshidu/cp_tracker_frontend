@@ -8,9 +8,15 @@ type Props = {
   row: Problem;
   onEdit: (row: Problem) => void;
   onDelete: (id: string) => void;
+  onArchive: (id: string) => void;
 };
 
-export default function RowMenu({ row, onEdit, onDelete }: Props) {
+export default function RowMenu({
+  row,
+  onEdit,
+  onDelete,
+  onArchive,
+}: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleEdit = () => {
@@ -21,6 +27,11 @@ export default function RowMenu({ row, onEdit, onDelete }: Props) {
   const handleDelete = () => {
     setIsOpen(false);
     onDelete(row.id);
+  };
+
+  const handleArchive = () => {
+    setIsOpen(false);
+    onArchive(row.id);
   };
 
   return (
@@ -61,8 +72,8 @@ export default function RowMenu({ row, onEdit, onDelete }: Props) {
             <button
               type="button"
               className={styles.menuItem}
-              disabled
               title="近日公開"
+              onClick={handleArchive}
             >
               アーカイブ
             </button>
