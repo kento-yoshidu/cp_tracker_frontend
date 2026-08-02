@@ -27,6 +27,11 @@ type Props = {
   setSelectedTags: Dispatch<SetStateAction<string[]>>;
 };
 
+type PendingAction =
+  | { type: "ac"; id: string }
+  | { type: "delete"; id: string }
+  | { type: "archive"; id: string };
+
 export default function Table({
   data,
   now,
@@ -34,8 +39,9 @@ export default function Table({
   setSelectedTags,
 }: Props) {
   const router = useRouter();
-  const [confirmingId, setConfirmingId] = useState<string | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
+
   const [editingProblem, setEditingProblem] = useState<Problem | null>(null);
 
   const [snackBar, setSnackBar] = useState<SnackBarState>({
@@ -68,25 +74,6 @@ export default function Table({
     },
   });
 
-  const handlerAc = (id: string) => {
-    setConfirmingId(id);
-  };
-
-  const handleConfirmAc = () => {
-    if (confirmingId === null) return;
-
-    acMutation.mutate(confirmingId);
-    setConfirmingId(null);
-  };
-
-  const handleArchive = (id: string) => {
-    archiveMutation.mutate(id);
-  };
-
-  const handleCancelAc = () => {
-    setConfirmingId(null);
-  };
-
   const deleteProblemMutation = useMutation({
     mutationFn: (id: string) => deleteProblemClient(id),
     onSuccess: () => {
@@ -99,22 +86,39 @@ export default function Table({
     },
   });
 
-  const handleDelete = (id: string) => {
-    setDeletingId(id);
+  const handleConfirm = () => {
+    if (!pendingAction) {
+      return;
+    }
+
+    const { type, id } = pendingAction;
+
+    if (type === "ac") {
+      acMutation.mutate(id);
+    }
+
+    if (type === "delete") {
+      deleteProblemMutation.mutate(id);
+    }
+
+    if (type === "archive") {
+      archiveMutation.mutate(id);
+    }
+
+    setPendingAction(null);
   };
 
-  const handleConfirmDelete = () => {
-    if (deletingId === null) return;
-
-    deleteProblemMutation.mutate(deletingId);
-    setDeletingId(null);
-  };
-
-  const handleCancelDelete = () => {
-    setDeletingId(null);
+  const handleClose = () => {
+    setPendingAction(null);
   };
 
   const isPending = acMutation.isPending || deleteProblemMutation.isPending;
+
+  const titles: Record<PendingAction["type"], string> = {
+    ac: "ACカウントを+1します",
+    delete: "この問題を削除します",
+    archive: "この問題をアーカイブします",
+  };
 
   return (
     <>
@@ -196,7 +200,7 @@ export default function Table({
                         <button
                           type="button"
                           className={styles.acButton}
-                          onClick={() => handlerAc(data.id)}
+                          onClick={() => setPendingAction({ type: "ac", id: data.id })}
                         >
                           +1
                         </button>
@@ -215,8 +219,8 @@ export default function Table({
                       <RowMenu
                         row={data}
                         onEdit={setEditingProblem}
-                        onDelete={handleDelete}
-                        onArchive={handleArchive}
+                        onDelete={() => setPendingAction({ type: "delete", id: data.id })}
+                        onArchive={() => setPendingAction({ type: "archive", id: data.id })}
                       />
                     </div>
                   </td>
@@ -230,19 +234,11 @@ export default function Table({
 
       {isPending && <FullScreenLoading />}
 
-      {confirmingId !== null && (
+      {pendingAction && (
         <AlertModal
-          title="ACカウントを+1します。よろしいですか?"
-          onClick={handleConfirmAc}
-          onClose={handleCancelAc}
-        />
-      )}
-
-      {deletingId !== null && (
-        <AlertModal
-          title="この問題を削除します。よろしいですか?"
-          onClick={handleConfirmDelete}
-          onClose={handleCancelDelete}
+          title={titles[pendingAction.type]}
+          onClick={handleConfirm}
+          onClose={handleClose}
         />
       )}
 
