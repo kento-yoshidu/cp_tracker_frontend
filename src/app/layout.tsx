@@ -1,5 +1,6 @@
 import "./globals.css";
 import Header from "./_compnents/Header/Header";
+import Menu from "./_compnents/Menu/Menu";
 import QueryProvider from "./_compnents/QueryProvider";
 import meServer from "./apis/me.server";
 import fetchProblemsServer from "./apis/fetchProblems.servre";
@@ -35,6 +36,8 @@ export default async function RootLayout({
 
             <Footer />
           </div>
+
+          <Menu />
         </QueryProvider>
       </body>
     </html>
