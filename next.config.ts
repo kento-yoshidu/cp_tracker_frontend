@@ -1,10 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
-  outputFileTracingIncludes: {
-    "/*": ["node_modules/.pnpm/@shikijs+*/node_modules/@shikijs/**/*"],
-  },
+  /* config options here */
 };
 
 export default nextConfig;
