@@ -10,3 +10,10 @@
 
 - Rust
   - Actix Web
+
+### デプロイ先
+
+- フロントエンド
+  - amplify
+- バックエンド
+  - Render
