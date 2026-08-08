@@ -1,24 +1,24 @@
 "use client";
 
-import { useState, type Dispatch, type SetStateAction, } from "react";
-import Link from "next/link";
-import updateAcCountClient from "@/app/apis/updateAcCount.client";
-import deleteProblemClient from "@/app/apis/deleteProblem.client";
 import { useMutation } from "@tanstack/react-query";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import FullScreenLoading from "../UI/FullScreenLoading";
-import Tag from "../Tag/Tag";
-import AlertModal from "../AlertModal/AlertModal";
-import DifficultySquare from "../DifficultySquare/DifficultySquare";
+import { type Dispatch, type SetStateAction, useState } from "react";
+import archiveClient from "@/app/apis/archive.client";
+import deleteProblemClient from "@/app/apis/deleteProblem.client";
+import updateAcCountClient from "@/app/apis/updateAcCount.client";
 import { formatDate } from "@/lib/formatDate";
 import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
-import SnackBar from "../UI/SnackBar";
-import RowMenu from "../RowMenu/RowMenu";
+import type { ApiGetProblemsResponse, Problem, SnackBarState } from "@/types";
+import AlertModal from "../AlertModal/AlertModal";
+import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import EditProblemModal from "../EditProblemModal/EditProblemModal";
+import RowMenu from "../RowMenu/RowMenu";
+import Tag from "../Tag/Tag";
 import Badge from "../UI/Badge";
-import archiveClient from "@/app/apis/archive.client";
+import FullScreenLoading from "../UI/FullScreenLoading";
+import SnackBar from "../UI/SnackBar";
 import styles from "./table.module.css";
-import type { ApiGetProblemsResponse, Problem, SnackBarState } from "@/types"
 
 type Props = {
   data: Problem[];
@@ -40,7 +40,9 @@ export default function Table({
 }: Props) {
   const router = useRouter();
 
-  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(
+    null,
+  );
 
   const [editingProblem, setEditingProblem] = useState<Problem | null>(null);
 
@@ -123,113 +125,131 @@ export default function Table({
   return (
     <>
       <div className={styles.tableWrapper}>
-
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>問題</th>
-            <th>タグ</th>
-            {isLoggedIn && (
-              <>
-                <th>AC<br />カウント</th>
-                <th>最終AC日</th>
-                <th></th>
-              </>
-            )}
-          </tr>
-        </thead>
-
-        <tbody>
-          {data.map((data) => (
-            <tr
-              key={data.id}
-              className={isDone(data.acCount) ? styles.doneRow : undefined}
-            >
-              <td>
-                <div className={styles.titleWrapper}>
-
-                  <Link
-                    href={data.url}
-                    className={styles.title}
-                  >
-                    <DifficultySquare difficulty={data.difficulty} />
-
-                    {data.title}
-                  </Link>
-
-                  {isLoggedIn && (
-                    <>
-                      {shouldShowSolveBadge(data.acCount, data.lastSolvedAt, now) && (
-                        <Badge
-                          label="Solve!"
-                          variant="solve"
-                        />
-                      )}
-
-                      {isDone(data.acCount) && (
-                        <Badge
-                          label="Done"
-                          variant="done"
-                        />
-                      )}
-                    </>
-                  )}
-                </div>
-              </td>
-              <td>
-                <div className={styles.tags}>
-                  {data.tags.map((tag) => (
-                    <Tag
-                      key={`tag-${tag}`}
-                      tagName={tag}
-                      onClick={() => setSelectedTags((prev) =>
-                        prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-                      )}
-                    />
-                  ))}
-                </div>
-              </td>
-
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>問題</th>
+              <th>タグ</th>
               {isLoggedIn && (
                 <>
-                  <td>
-                    <div className={styles.acCount}>
-                      <p>{data.acCount}</p>
-
-                      {isLoggedIn && (
-                        <button
-                          type="button"
-                          className={styles.acButton}
-                          onClick={() => setPendingAction({ type: "ac", id: data.id })}
-                        >
-                          +1
-                        </button>
-                      )}
-                    </div>
-                  </td>
-
-                  <td>
-                    <p className={styles.createdAt}>
-                      {data.lastSolvedAt ? formatDate(data.lastSolvedAt) : "-"}
-                    </p>
-                  </td>
-
-                  <td>
-                    <div className={styles.menu}>
-                      <RowMenu
-                        row={data}
-                        onEdit={setEditingProblem}
-                        onDelete={() => setPendingAction({ type: "delete", id: data.id })}
-                        onArchive={() => setPendingAction({ type: "archive", id: data.id })}
-                      />
-                    </div>
-                  </td>
+                  <th>
+                    AC
+                    <br />
+                    カウント
+                  </th>
+                  <th>最終AC日</th>
+                  <th></th>
                 </>
               )}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {data.map((data) => (
+              <tr
+                key={data.id}
+                className={isDone(data.acCount) ? styles.doneRow : undefined}
+              >
+                <td>
+                  <div className={styles.titleWrapper}>
+                    <Link
+                      href={data.url}
+                      className={styles.title}
+                    >
+                      <DifficultySquare difficulty={data.difficulty} />
+
+                      {data.title}
+                    </Link>
+
+                    {isLoggedIn && (
+                      <>
+                        {shouldShowSolveBadge(
+                          data.acCount,
+                          data.lastSolvedAt,
+                          now,
+                        ) && (
+                          <Badge
+                            label="Solve!"
+                            variant="solve"
+                          />
+                        )}
+
+                        {isDone(data.acCount) && (
+                          <Badge
+                            label="Done"
+                            variant="done"
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
+                </td>
+                <td>
+                  <div className={styles.tags}>
+                    {data.tags.map((tag) => (
+                      <Tag
+                        key={`tag-${tag}`}
+                        tagName={tag}
+                        onClick={() =>
+                          setSelectedTags((prev) =>
+                            prev.includes(tag)
+                              ? prev.filter((t) => t !== tag)
+                              : [...prev, tag],
+                          )
+                        }
+                      />
+                    ))}
+                  </div>
+                </td>
+
+                {isLoggedIn && (
+                  <>
+                    <td>
+                      <div className={styles.acCount}>
+                        <p>{data.acCount}</p>
+
+                        {isLoggedIn && (
+                          <button
+                            type="button"
+                            className={styles.acButton}
+                            onClick={() =>
+                              setPendingAction({ type: "ac", id: data.id })
+                            }
+                          >
+                            +1
+                          </button>
+                        )}
+                      </div>
+                    </td>
+
+                    <td>
+                      <p className={styles.createdAt}>
+                        {data.lastSolvedAt
+                          ? formatDate(data.lastSolvedAt)
+                          : "-"}
+                      </p>
+                    </td>
+
+                    <td>
+                      <div className={styles.menu}>
+                        <RowMenu
+                          row={data}
+                          onEdit={setEditingProblem}
+                          onDelete={() =>
+                            setPendingAction({ type: "delete", id: data.id })
+                          }
+                          onArchive={() =>
+                            setPendingAction({ type: "archive", id: data.id })
+                          }
+                        />
+                      </div>
+                    </td>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {isPending && <FullScreenLoading />}
@@ -257,5 +277,5 @@ export default function Table({
         onClose={() => setSnackBar((prev) => ({ ...prev, isOpen: false }))}
       />
     </>
-  )
+  );
 }

@@ -5,18 +5,12 @@ type Props = {
   variant: "solve" | "done";
 };
 
-export default function Badge({
-  label,
-  variant,
-}: Props) {
-  const style =
-    variant === "solve" ? "solve" : "done";
+export default function Badge({ label, variant }: Props) {
+  const style = variant === "solve" ? "solve" : "done";
 
   return (
-    <div
-      className={`${styles.wrapper} ${styles[style]}`}
-    >
+    <div className={`${styles.wrapper} ${styles[style]}`}>
       <p>{label}</p>
     </div>
-  )
+  );
 }

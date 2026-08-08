@@ -1,5 +1,5 @@
-import { BASE_URL } from "@/constants/constants";
 import { NextRequest, NextResponse } from "next/server";
+import { BASE_URL } from "@/constants/constants";
 
 export async function POST(req: NextRequest) {
   const { username, password } = await req.json();

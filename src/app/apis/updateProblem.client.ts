@@ -1,6 +1,9 @@
 import { UpdateProblemInput } from "@/types";
 
-export default async function updateProblemClient(id: string, input: UpdateProblemInput): Promise<void> {
+export default async function updateProblemClient(
+  id: string,
+  input: UpdateProblemInput,
+): Promise<void> {
   const res = await fetch(`/api/problems/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

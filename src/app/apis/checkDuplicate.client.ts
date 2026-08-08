@@ -1,6 +1,8 @@
-export default async function checkDuplicateClient(url: string): Promise<boolean> {
+export default async function checkDuplicateClient(
+  url: string,
+): Promise<boolean> {
   const res = await fetch(
-    `/api/problems/check-duplicate?url=${encodeURIComponent(url)}`
+    `/api/problems/check-duplicate?url=${encodeURIComponent(url)}`,
   );
 
   if (!res.ok) {

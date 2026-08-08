@@ -1,5 +1,5 @@
-import { BASE_URL } from "@/constants/constants";
 import type { NextRequest } from "next/server";
+import { BASE_URL } from "@/constants/constants";
 
 export async function GET(req: NextRequest) {
   await new Promise((rev) => setTimeout(rev, 1000));
@@ -11,11 +11,11 @@ export async function GET(req: NextRequest) {
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-    }
+    },
   );
 
   if (!res.ok) {
-      return new Response(null, { status: res.status });
+    return new Response(null, { status: res.status });
   }
 
   const data = await res.json();

@@ -8,12 +8,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function SnackBar({
-  title,
-  variant,
-  isOpen,
-  onClose
-}: Props) {
+export default function SnackBar({ title, variant, isOpen, onClose }: Props) {
   if (!isOpen) {
     return;
   }

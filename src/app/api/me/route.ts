@@ -1,5 +1,5 @@
-import { BASE_URL } from "@/constants/constants";
 import { type NextRequest, NextResponse } from "next/server";
+import { BASE_URL } from "@/constants/constants";
 
 export async function GET(req: NextRequest) {
   const cookie = req.headers.get("cookie");

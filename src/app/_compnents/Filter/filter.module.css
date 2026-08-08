@@ -7,10 +7,10 @@
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 24px;
-  background-color: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: rgb(255 255 255 / 6%);
+  border: 1px solid rgb(255 255 255 / 15%);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 35%);
 
   .label {
     font-weight: 700;
@@ -24,20 +24,19 @@
     padding: 6px 14px;
     border-radius: 8px;
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+    background-color: rgb(255 255 255 / 6%);
+    border: 1px solid rgb(255 255 255 / 25%);
     color: #fff;
     font-size: 14px;
     transition: 0.2s;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.15);
+      background-color: rgb(255 255 255 / 15%);
     }
   }
 
   .filterButtonActive {
-    background-color: rgba(var(--color-primary-rgb), 0.5);
+    background-color: rgb(var(--color-primary-rgb), 0.5);
     border-color: var(--color-primary);
   }
 }
-

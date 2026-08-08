@@ -6,10 +6,7 @@ type Props = {
   onClick?: () => void;
 };
 
-export default function Tag({
-  tagName,
-  onClick,
-}: Props) {
+export default function Tag({ tagName, onClick }: Props) {
   const { bg, text } = getTagColor(tagName);
 
   return (

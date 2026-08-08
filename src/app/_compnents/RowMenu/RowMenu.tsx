@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import styles from "./rowMenu.module.css";
 import type { Problem } from "@/types";
+import styles from "./rowMenu.module.css";
 
 type Props = {
   row: Problem;
@@ -11,12 +11,7 @@ type Props = {
   onArchive: (id: string) => void;
 };
 
-export default function RowMenu({
-  row,
-  onEdit,
-  onDelete,
-  onArchive,
-}: Props) {
+export default function RowMenu({ row, onEdit, onDelete, onArchive }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleEdit = () => {

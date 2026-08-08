@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   z-index: 99;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgb(0 0 0 / 50%);
 }
 
 .dialog {
@@ -13,7 +13,7 @@
   border: none;
   border-radius: 12px;
   background-color: #fff;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 24px rgb(0 0 0 / 40%);
   z-index: 100;
 }
 

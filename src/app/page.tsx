@@ -1,11 +1,10 @@
-
-import fetchProblemsServer from "./apis/fetchProblems.servre";
-import meServer from "./apis/me.server";
+import { FetchStrategy } from "next/dist/client/components/segment-cache/types";
 import nowServer from "@/lib/now.server";
 import Contents from "./_compnents/Contents";
 import fetchActivities from "./apis/fetchActivities.client";
-import { FetchStrategy } from "next/dist/client/components/segment-cache/types";
 import fetchArchives from "./apis/fetchArchives";
+import fetchProblemsServer from "./apis/fetchProblems.servre";
+import meServer from "./apis/me.server";
 
 export default async function Home() {
   const problems = await fetchProblemsServer();

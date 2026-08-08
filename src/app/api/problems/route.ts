@@ -1,5 +1,5 @@
-import { BASE_URL } from "@/constants/constants";
 import type { NextRequest } from "next/server";
+import { BASE_URL } from "@/constants/constants";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

@@ -14,7 +14,10 @@ async function main() {
   });
 
   const entries = snippets.map((s) => {
-    const html = highlighter.codeToHtml(s.code, { lang: "rust", theme: "github-dark" });
+    const html = highlighter.codeToHtml(s.code, {
+      lang: "rust",
+      theme: "github-dark",
+    });
     return `  "${s.id}": ${JSON.stringify(html)},`;
   });
 
@@ -24,7 +27,10 @@ ${entries.join("\n")}
 };
 `;
 
-  writeFileSync(join(import.meta.dirname, "../src/data/snippets.generated.ts"), output);
+  writeFileSync(
+    join(import.meta.dirname, "../src/data/snippets.generated.ts"),
+    output,
+  );
   console.log(`Generated snippets.generated.ts (${snippets.length} snippets)`);
 }
 

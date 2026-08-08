@@ -16,7 +16,11 @@ function parseYYYYMMDD(date: string): number {
   return new Date(Number(year), Number(month) - 1, Number(day)).getTime();
 }
 
-export function shouldShowSolveBadge(acCount: number, lastSolvedAt: string, now: number): boolean {
+export function shouldShowSolveBadge(
+  acCount: number,
+  lastSolvedAt: string,
+  now: number,
+): boolean {
   if (acCount >= DONE_THRESHOLD) return false;
   if (acCount === 0) return true;
 
