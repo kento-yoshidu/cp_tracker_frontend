@@ -1,8 +1,7 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState, type Dispatch, type SetStateAction, } from "react";
 import Link from "next/link";
-import styles from "./table.module.css";
 import updateAcCountClient from "@/app/apis/updateAcCount.client";
 import deleteProblemClient from "@/app/apis/deleteProblem.client";
 import { useMutation } from "@tanstack/react-query";
@@ -17,8 +16,9 @@ import SnackBar from "../UI/SnackBar";
 import RowMenu from "../RowMenu/RowMenu";
 import EditProblemModal from "../EditProblemModal/EditProblemModal";
 import Badge from "../UI/Badge";
-import type { Problem, SnackBarState } from "@/types"
 import archiveClient from "@/app/apis/archive.client";
+import styles from "./table.module.css";
+import type { ApiGetProblemsResponse, Problem, SnackBarState } from "@/types"
 
 type Props = {
   data: Problem[];
@@ -143,7 +143,7 @@ export default function Table({
           {data.map((data) => (
             <tr
               key={data.id}
-              className={isDone(data.ac_count) ? styles.doneRow : undefined}
+              className={isDone(data.acCount) ? styles.doneRow : undefined}
             >
               <td>
                 <div className={styles.titleWrapper}>
@@ -159,14 +159,14 @@ export default function Table({
 
                   {isLoggedIn && (
                     <>
-                      {shouldShowSolveBadge(data.ac_count, data.last_solved_at, now) && (
+                      {shouldShowSolveBadge(data.acCount, data.lastSolvedAt, now) && (
                         <Badge
                           label="Solve!"
                           variant="solve"
                         />
                       )}
 
-                      {isDone(data.ac_count) && (
+                      {isDone(data.acCount) && (
                         <Badge
                           label="Done"
                           variant="done"
@@ -194,7 +194,7 @@ export default function Table({
                 <>
                   <td>
                     <div className={styles.acCount}>
-                      <p>{data.ac_count}</p>
+                      <p>{data.acCount}</p>
 
                       {isLoggedIn && (
                         <button
@@ -210,7 +210,7 @@ export default function Table({
 
                   <td>
                     <p className={styles.createdAt}>
-                      {data.last_solved_at ? formatDate(data.last_solved_at) : "-"}
+                      {data.lastSolvedAt ? formatDate(data.lastSolvedAt) : "-"}
                     </p>
                   </td>
 

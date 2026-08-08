@@ -1,6 +1,5 @@
 .tableWrapper {
   width: 100%;
-  margin-top: 8px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(16px);
@@ -24,7 +23,6 @@
   th:first-child,
   td:first-child {
     padding-left: 24px;
-    /* width: 400px; */
   }
 
   thead th {
@@ -45,10 +43,6 @@
   }
 
   td {
-    &:has(.createdAt) {
-      width: 120px;
-    }
-
     &:has(.titleWrapper) {
       width: 400px;
     }

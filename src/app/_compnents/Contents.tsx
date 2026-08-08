@@ -30,7 +30,7 @@ export default function Contents({
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const filteredData = problems.filter((problem) => {
-    if (onlySolve && !shouldShowSolveBadge(problem.ac_count, problem.last_solved_at, now)) {
+    if (onlySolve && !shouldShowSolveBadge(problem.acCount, problem.lastSolvedAt, now)) {
       return false;
     }
 

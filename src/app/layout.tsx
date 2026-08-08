@@ -10,7 +10,7 @@ import type { Problem } from "@/types";
 
 function calcAcRate(problems: Problem[]) {
   const denominator = problems.length * 5;
-  const numerator = problems.reduce((sum, p) => sum + Math.min(5, p.ac_count), 0);
+  const numerator = problems.reduce((sum, p) => sum + Math.min(5, p.acCount), 0);
   const rate = denominator === 0 ? 0 : (numerator / denominator) * 100;
 
   return { rate, numerator, denominator };
