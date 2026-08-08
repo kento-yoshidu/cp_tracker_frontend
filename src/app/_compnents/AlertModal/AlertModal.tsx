@@ -7,11 +7,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function AlertModal({
-  title,
-  onClick,
-  onClose,
-}: Props) {
+export default function AlertModal({ title, onClick, onClose }: Props) {
   return (
     <>
       <div className={styles.overlay} />

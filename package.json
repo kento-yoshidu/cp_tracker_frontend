@@ -6,7 +6,7 @@
     "dev": "pnpm run snippets:build && next dev",
     "build": "pnpm run snippets:build && next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "biome check",
     "snippets:build": "tsx scripts/build-snippets.ts"
   },
   "dependencies": {
@@ -16,12 +16,13 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.9",
     "shiki": "^4.4.2",
+    "stylelint": "^17.14.1",
+    "stylelint-config-standard": "^40.0.0",
     "tsx": "^4.23.10",
     "typescript": "^5"
   }

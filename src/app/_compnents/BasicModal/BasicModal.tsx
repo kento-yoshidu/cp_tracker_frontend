@@ -8,12 +8,7 @@ type Props = {
   children: ReactNode;
 };
 
-export default function BasicModal({
-  open,
-  title,
-  onClose,
-  children,
-}: Props) {
+export default function BasicModal({ open, title, onClose, children }: Props) {
   if (!open) return null;
 
   return (
@@ -40,9 +35,7 @@ export default function BasicModal({
           </button>
         </div>
 
-        <div className={styles.body}>
-          {children}
-        </div>
+        <div className={styles.body}>{children}</div>
       </dialog>
     </>
   );

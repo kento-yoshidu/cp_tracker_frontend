@@ -1,5 +1,5 @@
-import { BASE_URL } from "@/constants/constants";
 import { cookies } from "next/headers";
+import { BASE_URL } from "@/constants/constants";
 
 export default async function meServer(): Promise<boolean> {
   const cookieStore = await cookies();

@@ -1,16 +1,16 @@
 "use client";
 
-import { SubmitEvent, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { SubmitEvent, useState } from "react";
+import checkDuplicateClient from "@/app/apis/checkDuplicate.client";
+import createNewProblemClient from "@/app/apis/createNewProblem.client";
 import { CreateProblemInput } from "@/types";
 import BasicModal from "../BasicModal/BasicModal";
 import Button from "../Button/Button";
-import styles from "./createProblemModal.module.css";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import checkDuplicateClient from "@/app/apis/checkDuplicate.client";
-import createNewProblemClient from "@/app/apis/createNewProblem.client";
 import FullScreenLoading from "../UI/FullScreenLoading";
 import SnackBar from "../UI/SnackBar";
+import styles from "./createProblemModal.module.css";
 
 type Props = {
   open: boolean;
@@ -27,10 +27,7 @@ const initialForm = {
   difficulty: "",
 };
 
-export default function CreateProblemModal({
-  open,
-  onClose,
-}: Props) {
+export default function CreateProblemModal({ open, onClose }: Props) {
   const router = useRouter();
   const [form, setForm] = useState(initialForm);
 
@@ -44,7 +41,8 @@ export default function CreateProblemModal({
     variant: "success",
   });
 
-  const handleChange = (key: keyof typeof initialForm) =>
+  const handleChange =
+    (key: keyof typeof initialForm) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
     };
@@ -54,7 +52,11 @@ export default function CreateProblemModal({
     onSuccess: () => {
       onClose();
       router.refresh();
-      setSnackBar({ isOpen: true, title: "問題を登録しました", variant: "success" });
+      setSnackBar({
+        isOpen: true,
+        title: "問題を登録しました",
+        variant: "success",
+      });
     },
   });
 
@@ -92,7 +94,7 @@ export default function CreateProblemModal({
 
   const handleUrlBlur = () => {
     if (form.url === "") {
-      return
+      return;
     }
 
     checkDuplicate();
@@ -117,7 +119,10 @@ export default function CreateProblemModal({
               onChange={handleChange("platform")}
             >
               {PLATFORMS.map((platform) => (
-                <option key={platform} value={platform}>
+                <option
+                  key={platform}
+                  value={platform}
+                >
                   {platform}
                 </option>
               ))}
@@ -184,7 +189,9 @@ export default function CreateProblemModal({
         </form>
       </BasicModal>
 
-      {(isCheckDuplicateFetching || createProblemMutation.isPending) && <FullScreenLoading />}
+      {(isCheckDuplicateFetching || createProblemMutation.isPending) && (
+        <FullScreenLoading />
+      )}
 
       <SnackBar
         title={snackBar.title}

@@ -22,7 +22,11 @@ export default function Filter({
       {isLoggedIn && (
         <button
           type="button"
-          className={onlySolve ? `${styles.filterButton} ${styles.filterButtonActive}` : styles.filterButton}
+          className={
+            onlySolve
+              ? `${styles.filterButton} ${styles.filterButtonActive}`
+              : styles.filterButton
+          }
           onClick={() => onClick(!onlySolve)}
         >
           Solve!のみ
@@ -39,7 +43,9 @@ export default function Filter({
         <Tag
           key={`selected-tag-${tag}`}
           tagName={tag}
-          onClick={() => setSelectedTags((prev) => prev.filter((t) => t !== tag))}
+          onClick={() =>
+            setSelectedTags((prev) => prev.filter((t) => t !== tag))
+          }
         />
       ))}
     </div>

@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Table from "./Table/Table";
 import { shouldShowSolveBadge } from "@/lib/solveBadge";
-import Filter from "./Filter/Filter";
-import styles from "./Contents.module.css";
-import ArchiveTable from "./ArchiveTable/ArchiveTable";
 import type { Activity, Archives, Problem } from "@/types";
+import ArchiveTable from "./ArchiveTable/ArchiveTable";
+import styles from "./Contents.module.css";
+import Filter from "./Filter/Filter";
+import Table from "./Table/Table";
 
 type Props = {
   problems: Problem[];
@@ -30,7 +30,10 @@ export default function Contents({
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const filteredData = problems.filter((problem) => {
-    if (onlySolve && !shouldShowSolveBadge(problem.ac_count, problem.last_solved_at, now)) {
+    if (
+      onlySolve &&
+      !shouldShowSolveBadge(problem.acCount, problem.lastSolvedAt, now)
+    ) {
       return false;
     }
 
@@ -66,14 +69,15 @@ export default function Contents({
               <span className={styles.count}>{archives.length}件</span>
             </span>
 
-            <span className={styles.chevron} aria-hidden="true">
+            <span
+              className={styles.chevron}
+              aria-hidden="true"
+            >
               ▾
             </span>
           </summary>
 
-          <ArchiveTable
-            data={archives}
-          />
+          <ArchiveTable data={archives} />
         </details>
       )}
     </>

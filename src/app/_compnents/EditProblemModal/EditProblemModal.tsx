@@ -1,15 +1,15 @@
 "use client";
 
-import { SubmitEvent, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { SubmitEvent, useState } from "react";
+import updateProblemClient from "@/app/apis/updateProblem.client";
+import type { Problem, UpdateProblemInput } from "@/types";
 import BasicModal from "../BasicModal/BasicModal";
 import Button from "../Button/Button";
 import styles from "../CreateProblemModal/createProblemModal.module.css";
-import { useMutation } from "@tanstack/react-query";
-import updateProblemClient from "@/app/apis/updateProblem.client";
 import FullScreenLoading from "../UI/FullScreenLoading";
 import SnackBar from "../UI/SnackBar";
-import type { Problem, UpdateProblemInput } from "@/types";
 
 type Props = {
   problem: Problem;
@@ -18,10 +18,7 @@ type Props = {
 
 const PLATFORMS = ["AtCoder", "AOJ"] as const;
 
-export default function EditProblemModal({
-  problem,
-  onClose,
-}: Props) {
+export default function EditProblemModal({ problem, onClose }: Props) {
   const router = useRouter();
   const [form, setForm] = useState({
     platform: problem.platform,
@@ -41,17 +38,23 @@ export default function EditProblemModal({
     variant: "success",
   });
 
-  const handleChange = (key: keyof typeof form) =>
+  const handleChange =
+    (key: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
     };
 
   const updateProblemMutation = useMutation({
-    mutationFn: (input: UpdateProblemInput) => updateProblemClient(problem.id, input),
+    mutationFn: (input: UpdateProblemInput) =>
+      updateProblemClient(problem.id, input),
     onSuccess: () => {
       onClose();
       router.refresh();
-      setSnackBar({ isOpen: true, title: "問題を更新しました", variant: "success" });
+      setSnackBar({
+        isOpen: true,
+        title: "問題を更新しました",
+        variant: "success",
+      });
     },
   });
 
@@ -89,7 +92,10 @@ export default function EditProblemModal({
               onChange={handleChange("platform")}
             >
               {PLATFORMS.map((platform) => (
-                <option key={platform} value={platform}>
+                <option
+                  key={platform}
+                  value={platform}
+                >
                   {platform}
                 </option>
               ))}

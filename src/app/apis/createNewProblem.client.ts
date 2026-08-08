@@ -1,6 +1,8 @@
-import { CreateProblemInput } from "@/types";
+import type { CreateProblemInput } from "@/types";
 
-export default async function createNewProblemClient(input: CreateProblemInput): Promise<void> {
+export default async function createNewProblemClient(
+  input: CreateProblemInput,
+): Promise<void> {
   const res = await fetch(`/api/problems`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

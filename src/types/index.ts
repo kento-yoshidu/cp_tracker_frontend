@@ -1,3 +1,5 @@
+export * from "./api";
+
 export type Problem = {
   id: string;
   platform: string;
@@ -5,14 +7,14 @@ export type Problem = {
   url: string;
   tags: string[];
   difficulty?: number;
-  ac_count: number;
-  last_solved_at: string;
+  acCount: number;
+  lastSolvedAt: string;
 };
 
 export type Activity = {
   date: string;
-  ac_count: number;
-  max_difficulty: number;
+  acCount: number;
+  maxDifficulty: number;
 };
 
 export type Archives = {
@@ -22,7 +24,7 @@ export type Archives = {
   url: string;
   tags: string[];
   difficulty?: number;
-  archived_at: string;
+  archivedAt: string;
 };
 
 export type CreateProblemInput = {

@@ -67,6 +67,6 @@ impl UnionFind {
             .len()
     }
 }
-    `
-  }
+    `,
+  },
 ];

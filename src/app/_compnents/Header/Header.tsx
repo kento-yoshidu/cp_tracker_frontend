@@ -1,8 +1,8 @@
 "use client";
 
-import styles from "./header.module.css";
 import { useState } from "react";
 import CreateProblemModal from "../CreateProblemModal/CreateProblemModal";
+import styles from "./header.module.css";
 
 type AcRate = {
   rate: number;
@@ -17,10 +17,12 @@ type Props = {
 
 export default function Header({ isLoggedIn, acRate }: Props) {
   const isLocalDev = process.env.NODE_ENV === "development";
-  const isTargetingProductionBackend = !process.env.NEXT_PUBLIC_API_URL?.includes("localhost");
+  const isTargetingProductionBackend =
+    !process.env.NEXT_PUBLIC_API_URL?.includes("localhost");
   const showProductionBadge = isLocalDev && isTargetingProductionBackend;
 
-  const [isOpenCreateProblemModal, setIsOpenCreateProblemModal] = useState(false);
+  const [isOpenCreateProblemModal, setIsOpenCreateProblemModal] =
+    useState(false);
 
   return (
     <header className={styles.header}>
@@ -30,10 +32,13 @@ export default function Header({ isLoggedIn, acRate }: Props) {
         <>
           <div className={styles.actions}>
             <span className={styles.acRate}>
-              AC率 {acRate.rate.toFixed(1)}% ({acRate.numerator}/{acRate.denominator})
+              AC率 {acRate.rate.toFixed(1)}% ({acRate.numerator}/
+              {acRate.denominator})
             </span>
 
-            {showProductionBadge && <span className={styles.productionBadge}>本番データ</span>}
+            {showProductionBadge && (
+              <span className={styles.productionBadge}>本番データ</span>
+            )}
 
             {isLoggedIn && (
               <>
@@ -48,7 +53,6 @@ export default function Header({ isLoggedIn, acRate }: Props) {
                 </button>
               </>
             )}
-
           </div>
 
           <CreateProblemModal

@@ -1,9 +1,9 @@
-import { BASE_URL } from "@/constants/constants";
 import type { NextRequest } from "next/server";
+import { BASE_URL } from "@/constants/constants";
 
 export async function PUT(
   req: NextRequest,
-  ctx: RouteContext<"/api/problems/[problem_id]">
+  ctx: RouteContext<"/api/problems/[problem_id]">,
 ) {
   const { problem_id } = await ctx.params;
   const body = await req.json();
@@ -28,7 +28,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  ctx: RouteContext<"/api/problems/[problem_id]">
+  ctx: RouteContext<"/api/problems/[problem_id]">,
 ) {
   const { problem_id } = await ctx.params;
   const cookie = req.headers.get("cookie");
