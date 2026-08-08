@@ -3,7 +3,7 @@ import styles from "./tag.module.css";
 
 type Props = {
   tagName: string;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export default function Tag({

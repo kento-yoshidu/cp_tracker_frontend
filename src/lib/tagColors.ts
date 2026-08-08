@@ -13,6 +13,9 @@ const TAG_COLORS: Record<string, TagColor> = {
   連結成分:       { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
   弱連結成分:      { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
   有向グラフ:      { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
+  閉路検出:       { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
+  経路数:        { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
+  到達可能性:     { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
 
   // 最短経路
   最短経路:        { bg: "linear-gradient(135deg, #1d4ed8, #4338ca)", text: "#fff" },
@@ -43,6 +46,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   simulation:     { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   "two-pointers": { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   尺取り法:        { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  反転:           { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   imos法:          { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   sorting:        { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   sort:           { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
@@ -55,6 +59,8 @@ const TAG_COLORS: Record<string, TagColor> = {
   bit:             { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   geometry:        { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   bit全探索:         { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  ユークリッド距離:    { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  数学:             { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   順列:         { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
 
   // 文字列
@@ -70,6 +76,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   BtreeMap:       { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
   BtreeSet:       { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
   VecDeque:       { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
+  BinaryHeap:     { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
 };
 
 const DEFAULT_COLOR: TagColor = { bg: "#6b7280", text: "#fff" };
