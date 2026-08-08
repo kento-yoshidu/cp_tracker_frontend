@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "pnpm run snippets:build && next dev",
+    "build": "pnpm run snippets:build && next build",
     "start": "next start",
     "lint": "eslint",
     "snippets:build": "tsx scripts/build-snippets.ts"
