@@ -1,15 +1,14 @@
 "use client";
 
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type Dispatch, type SetStateAction, useState } from "react";
 import archiveClient from "@/app/apis/archive.client";
 import deleteProblemClient from "@/app/apis/deleteProblem.client";
 import updateAcCountClient from "@/app/apis/updateAcCount.client";
 import { formatDate } from "@/lib/formatDate";
 import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
-import type { ApiGetProblemsResponse, Problem, SnackBarState } from "@/types";
 import AlertModal from "../AlertModal/AlertModal";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import EditProblemModal from "../EditProblemModal/EditProblemModal";
@@ -19,6 +18,7 @@ import Badge from "../UI/Badge";
 import FullScreenLoading from "../UI/FullScreenLoading";
 import SnackBar from "../UI/SnackBar";
 import styles from "./table.module.css";
+import type { Problem, SnackBarState } from "@/types";
 
 type Props = {
   data: Problem[];
