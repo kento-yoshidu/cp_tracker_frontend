@@ -1,0 +1,41 @@
+.trigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 28px;
+  line-height: 1;
+  color: #fff;
+}
+
+.menu {
+  position: fixed;
+  inset: auto;
+  top: anchor(bottom);
+  right: anchor(right);
+  margin: 4px 0 0;
+  flex-direction: column;
+  min-width: 140px;
+  padding: 8px 0;
+  border: none;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 8px 16px 0 rgb(0 0 0 / 40%);
+
+  &:popover-open {
+    display: flex;
+  }
+
+  .menuItem {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 16px;
+    text-align: left;
+    color: #444;
+
+    &:hover {
+      background-color: rgb(0 0 0 / 6%);
+    }
+  }
+}

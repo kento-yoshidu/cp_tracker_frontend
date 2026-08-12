@@ -7,7 +7,8 @@
     "build": "pnpm run snippets:build && next build",
     "start": "next start",
     "lint": "biome check",
-    "snippets:build": "tsx scripts/build-snippets.ts"
+    "snippets:build": "tsx scripts/build-snippets.ts",
+    "test": "vitest"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.1",
@@ -20,10 +21,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "jsdom": "^30.0.1",
     "shiki": "^4.4.2",
     "stylelint": "^17.14.1",
     "stylelint-config-standard": "^40.0.0",
     "tsx": "^4.23.10",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   }
 }
