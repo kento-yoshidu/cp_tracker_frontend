@@ -1,21 +1,33 @@
 import { useState } from "react";
 import Link from "next/link";
-import { Archives, SnackBarState } from "@/types";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import Tag from "../Tag/Tag";
-import styles from "./archiveTable.module.css";
 import ArchiveRowMenu from "../RowMenu/ArchiveRowMenu";
 import { useMutation } from "@tanstack/react-query";
 import deleteArchiveClient from "@/app/apis/deleteArchive.client";
 import { useRouter } from "next/navigation";
 import SnackBar from "../UI/SnackBar";
+import styles from "./archiveTable.module.css";
+import type { Archives, SnackBarState } from "@/types";
+import AlertModal from "../AlertModal/AlertModal";
 
 type Props = {
   data: Archives[];
 };
 
+type PendingAction =
+  | { type: "delete", id: string }
+  | { type: "restore", id: string };
+
+const titles: Record<PendingAction["type"], string> = {
+  delete: "この問題を削除します",
+  restore: "この問題をアーカイブします",
+};
+
 export default function ArchiveTable({ data }: Props) {
   const router = useRouter();
+
+  const [pendingAction, setPendingActoin] = useState<PendingAction | null>(null);
 
   const [snackBar, setSnackBar] = useState<SnackBarState>({
     isOpen: false,
@@ -35,6 +47,20 @@ export default function ArchiveTable({ data }: Props) {
       });
     },
   });
+
+  const handleConfirm = () => {
+    if (!pendingAction) {
+      return;
+    }
+
+    const { type, id } = pendingAction;
+
+    if (type === "delete") {
+      deleteArchiveMutation.mutate(id);
+    }
+
+    setPendingActoin(null);
+  };
 
   return (
     <>
@@ -78,7 +104,9 @@ export default function ArchiveTable({ data }: Props) {
                   <div className={styles.menu}>
                     <ArchiveRowMenu
                       row={data}
-                      onDelete={() => deleteArchiveMutation.mutate(data.id)}
+                      onDelete={() =>
+                        setPendingActoin({ type: "delete", id: data.id })
+                      }
                       onRestore={() => {}}
                     />
                   </div>
@@ -88,6 +116,14 @@ export default function ArchiveTable({ data }: Props) {
           </tbody>
         </table>
       </div>
+
+      {pendingAction && (
+        <AlertModal
+          title={titles[pendingAction.type]}
+          onClick={handleConfirm}
+          onClose={() => setPendingActoin(null)}
+        />
+      )}
 
       <SnackBar
         title={snackBar.title}
