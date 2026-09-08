@@ -155,6 +155,8 @@ export default function Table({
                     <Link
                       href={data.url}
                       className={styles.title}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <DifficultySquare difficulty={data.difficulty} />
 
