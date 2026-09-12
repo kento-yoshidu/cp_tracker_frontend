@@ -19,6 +19,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   閉路検出: { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
   経路数: { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
   到達可能性: { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
+  グリッド: { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
 
   // 最短経路
   最短経路: { bg: "linear-gradient(135deg, #1d4ed8, #4338ca)", text: "#fff" },
@@ -56,6 +57,10 @@ const TAG_COLORS: Record<string, TagColor> = {
   // DP
   動的計画法: { bg: "linear-gradient(135deg, #4338ca, #7c3aed)", text: "#fff" },
   部分和問題: { bg: "linear-gradient(135deg, #4338ca, #7c3aed)", text: "#fff" },
+  ナップサック: {
+    bg: "linear-gradient(135deg, #4338ca, #7c3aed)",
+    text: "#fff",
+  },
 
   // 探索系
   二分探索: { bg: "linear-gradient(135deg, #7c3aed, #a21caf)", text: "#fff" },
@@ -78,6 +83,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   尺取り法: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   反転: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   imos法: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  累積和: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   sorting: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   sort: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   配列インデックス: {
@@ -85,6 +91,8 @@ const TAG_COLORS: Record<string, TagColor> = {
     text: "#fff",
   },
   辞書順比較: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  一方を固定: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  制約に注目: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
 
   // 数学
   math: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
@@ -101,6 +109,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   },
   数学: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   順列: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  包除原理: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
 
   // 文字列
   文字列: { bg: "linear-gradient(135deg, #c2410c, #b91c1c)", text: "#fff" },
@@ -125,6 +134,12 @@ const TAG_COLORS: Record<string, TagColor> = {
   BtreeSet: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
   VecDeque: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
   BinaryHeap: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
+  stack: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
+
+  // Diff
+  茶Diff: { bg: "#804000", text: "#fff" },
+  緑Diff: { bg: "#00c000", text: "#000" },
+  水Diff: { bg: "#00c0c0", text: "#000" },
 };
 
 const DEFAULT_COLOR: TagColor = { bg: "#6b7280", text: "#fff" };
