@@ -1,8 +1,9 @@
 .box {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 4px;
   background-color: rgb(235 237 240 / 20%);
+  border: 1px solid #333;
 
   &.level1 {
     background-color: rgb(145 223 158 / 80%);
