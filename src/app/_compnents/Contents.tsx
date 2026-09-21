@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { shouldShowSolveBadge } from "@/lib/solveBadge";
-import type { Activity, Archives, Problem } from "@/types";
 import ArchiveTable from "./ArchiveTable/ArchiveTable";
 import styles from "./Contents.module.css";
 import Filter from "./Filter/Filter";
 import Table from "./Table/Table";
+import ActivityHeatMap from "./Activity/ActivityHeatMap";
+import type { Activity, Archives, Problem } from "@/types";
 
 type Props = {
   problems: Problem[];
@@ -23,9 +24,6 @@ export default function Contents({
   now,
   isLoggedIn,
 }: Props) {
-  console.log("activities = ", activities);
-  console.log("archives = ", archives);
-
   const [onlySolve, setOnlySolve] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -78,6 +76,28 @@ export default function Contents({
           </summary>
 
           <ArchiveTable data={archives} />
+        </details>
+      )}
+
+      {isLoggedIn && (
+        <details className={styles.archiveSection}>
+          <summary className={styles.archiveToggle}>
+            <span className={styles.label}>
+              アクティビティ
+            </span>
+
+            <span
+              className={styles.chevron}
+              aria-hidden="true"
+            >
+              ▾
+            </span>
+          </summary>
+
+          <ActivityHeatMap
+            activities={activities}
+            now={now}
+          />
         </details>
       )}
     </>

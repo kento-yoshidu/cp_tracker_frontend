@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  justify-content: safe center;
+  gap: 2px;
+  margin: 24px auto;
+  padding-bottom: 8px;
+  overflow-x: auto;
+
+  .week {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 2px;
+  }
+}
