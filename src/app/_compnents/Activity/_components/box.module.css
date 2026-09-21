@@ -1,0 +1,26 @@
+.box {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background-color: rgb(235 237 240 / 20%);
+
+  &.level1 {
+    background-color: rgb(145 223 158 / 80%);
+  }
+
+  &.level2 {
+    background-color: rgb(54 186 89 / 80%);
+  }
+
+  &.level3 {
+    background-color: rgb(38 151 68 / 80%);
+  }
+
+  &.level4 {
+    background-color: rgb(33 100 47 / 90%);
+  }
+
+  &.future {
+    visibility: hidden;
+  }
+}

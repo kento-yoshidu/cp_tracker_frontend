@@ -72,6 +72,7 @@ const TAG_COLORS: Record<string, TagColor> = {
     bg: "linear-gradient(135deg, #7c3aed, #a21caf)",
     text: "#fff",
   },
+  全探索: { bg: "linear-gradient(135deg, #7c3aed, #a21caf)", text: "#fff" },
 
   // 貪欲・実装トリック
   greedy: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
@@ -110,10 +111,19 @@ const TAG_COLORS: Record<string, TagColor> = {
   数学: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   順列: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   包除原理: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  場合の数: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  組み合わせ: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  数え上げ: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  周期性: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  式を変形: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
 
   // 文字列
   文字列: { bg: "linear-gradient(135deg, #c2410c, #b91c1c)", text: "#fff" },
   ローリングハッシュ: {
+    bg: "linear-gradient(135deg, #c2410c, #b91c1c)",
+    text: "#fff",
+  },
+  ランレングス圧縮: {
     bg: "linear-gradient(135deg, #c2410c, #b91c1c)",
     text: "#fff",
   },
