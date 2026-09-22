@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import packageJson from "../../../../package.json";
 import CreateProblemModal from "../CreateProblemModal/CreateProblemModal";
 import styles from "./header.module.css";
 
@@ -26,7 +27,10 @@ export default function Header({ isLoggedIn, acRate }: Props) {
 
   return (
     <header className={styles.header}>
-      <h1 className={styles.title}>CP Tracker</h1>
+      <h1 className={styles.title}>
+        CP Tracker
+        <span className={styles.version}>v{packageJson.version}</span>
+      </h1>
 
       {isLoggedIn && (
         <>
