@@ -13,6 +13,9 @@
   box-shadow: 0 8px 32px rgb(0 0 0 / 35%);
 
   .title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
     font-size: 20px;
     letter-spacing: 0.02em;
     background: linear-gradient(
@@ -21,8 +24,14 @@
       rgb(var(--color-primary-rgb), 0.9)
     );
     background-clip: text;
-    background-clip: text;
     color: transparent;
+  }
+
+  .version {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgb(255 255 255 / 45%);
+    -webkit-text-fill-color: rgb(255 255 255 / 45%);
   }
 
   .actions {
