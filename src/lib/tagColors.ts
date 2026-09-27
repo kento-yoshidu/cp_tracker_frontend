@@ -83,6 +83,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   },
   尺取り法: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   反転: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  rotate: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   imos法: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   累積和: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   sorting: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
@@ -92,6 +93,11 @@ const TAG_COLORS: Record<string, TagColor> = {
     text: "#fff",
   },
   辞書順比較: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  辞書順: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  "sliding window": {
+    bg: "linear-gradient(135deg, #059669, #0891b2)",
+    text: "#fff",
+  },
   一方を固定: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   制約に注目: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
 
@@ -110,9 +116,14 @@ const TAG_COLORS: Record<string, TagColor> = {
   },
   数学: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   順列: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  prev_permutation: {
+    bg: "linear-gradient(135deg, #db2777, #be185d)",
+    text: "#fff",
+  },
   包除原理: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   場合の数: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   組み合わせ: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  直積: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   数え上げ: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   周期性: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   式を変形: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
@@ -145,6 +156,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   VecDeque: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
   BinaryHeap: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
   stack: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
+  区間クエリ: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
 
   // Diff
   茶Diff: { bg: "#804000", text: "#fff" },
