@@ -75,7 +75,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   全探索: { bg: "linear-gradient(135deg, #7c3aed, #a21caf)", text: "#fff" },
 
   // 貪欲・実装トリック
-  greedy: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  貪欲法: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   simulation: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   "two-pointers": {
     bg: "linear-gradient(135deg, #059669, #0891b2)",
@@ -86,6 +86,8 @@ const TAG_COLORS: Record<string, TagColor> = {
   rotate: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   imos法: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   累積和: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  階差数列: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  差分更新: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   sorting: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   sort: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   配列インデックス: {
