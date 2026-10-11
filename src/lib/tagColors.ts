@@ -61,6 +61,10 @@ const TAG_COLORS: Record<string, TagColor> = {
     bg: "linear-gradient(135deg, #4338ca, #7c3aed)",
     text: "#fff",
   },
+  kボナッチ数列: {
+    bg: "linear-gradient(135deg, #4338ca, #7c3aed)",
+    text: "#fff",
+  },
 
   // 探索系
   二分探索: { bg: "linear-gradient(135deg, #7c3aed, #a21caf)", text: "#fff" },
@@ -91,6 +95,11 @@ const TAG_COLORS: Record<string, TagColor> = {
   sorting: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   sort: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   配列インデックス: {
+    bg: "linear-gradient(135deg, #059669, #0891b2)",
+    text: "#fff",
+  },
+  逆引き: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  オフセット管理: {
     bg: "linear-gradient(135deg, #059669, #0891b2)",
     text: "#fff",
   },
