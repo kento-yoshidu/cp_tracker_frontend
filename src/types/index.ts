@@ -9,6 +9,7 @@ export type Problem = {
   difficulty?: number;
   acCount: number;
   lastSolvedAt: string;
+  figureUrl?: string;
 };
 
 export type Activity = {
@@ -25,6 +26,7 @@ export type Archives = {
   tags: string[];
   difficulty?: number;
   archivedAt: string;
+  figureUrl?: string;
 };
 
 export type CreateProblemInput = {
@@ -33,6 +35,7 @@ export type CreateProblemInput = {
   title: string;
   tags: string[];
   difficulty: number;
+  figure_url?: string;
 };
 
 export type UpdateProblemInput = CreateProblemInput;

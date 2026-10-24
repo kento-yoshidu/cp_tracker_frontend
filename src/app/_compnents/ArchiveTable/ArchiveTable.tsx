@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
+import FigureLink from "../FigureLink/FigureLink";
 import Tag from "../Tag/Tag";
 import ArchiveRowMenu from "../RowMenu/ArchiveRowMenu";
 import { useMutation } from "@tanstack/react-query";
@@ -87,6 +88,8 @@ export default function ArchiveTable({ data }: Props) {
 
                       {data.title}
                     </Link>
+
+                    {data.figureUrl && <FigureLink href={data.figureUrl} />}
                   </div>
                 </td>
                 <td>

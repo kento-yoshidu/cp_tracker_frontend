@@ -12,6 +12,7 @@ import { isDone, shouldShowSolveBadge } from "@/lib/solveBadge";
 import AlertModal from "../AlertModal/AlertModal";
 import DifficultySquare from "../DifficultySquare/DifficultySquare";
 import EditProblemModal from "../EditProblemModal/EditProblemModal";
+import FigureLink from "../FigureLink/FigureLink";
 import RowMenu from "../RowMenu/RowMenu";
 import Tag from "../Tag/Tag";
 import Badge from "../UI/Badge";
@@ -152,16 +153,20 @@ export default function Table({
               >
                 <td>
                   <div className={styles.titleWrapper}>
-                    <Link
-                      href={data.url}
-                      className={styles.title}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <DifficultySquare difficulty={data.difficulty} />
+                    <div className={styles.titleMain}>
+                      <Link
+                        href={data.url}
+                        className={styles.title}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <DifficultySquare difficulty={data.difficulty} />
 
-                      {data.title}
-                    </Link>
+                        {data.title}
+                      </Link>
+
+                      {data.figureUrl && <FigureLink href={data.figureUrl} />}
+                    </div>
 
                     {isLoggedIn && (
                       <>

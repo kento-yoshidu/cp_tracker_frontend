@@ -82,6 +82,12 @@
       align-items: center;
       gap: 24px;
 
+      .titleMain {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
       .title {
         display: flex;
         align-items: center;

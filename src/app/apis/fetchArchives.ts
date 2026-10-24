@@ -10,6 +10,7 @@ const map = (a: ApiGetArchivesResponse): Archives => {
     tags: a.tags,
     difficulty: a.difficulty,
     archivedAt: a.archived_at,
+    figureUrl: a.figure_url,
   };
 };
 

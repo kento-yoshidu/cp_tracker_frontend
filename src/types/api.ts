@@ -7,6 +7,7 @@ export type ApiGetProblemsResponse = {
   difficulty?: number;
   ac_count: number;
   last_solved_at: string;
+  figure_url?: string;
 };
 
 export type ApiGetActivityResponse = {
@@ -23,4 +24,5 @@ export type ApiGetArchivesResponse = {
   tags: string[];
   difficulty?: number;
   archived_at: string;
+  figure_url?: string;
 };
