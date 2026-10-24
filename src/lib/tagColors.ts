@@ -89,6 +89,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   反転: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   rotate: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   配列スワップ: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  巡回シフト: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   imos法: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   累積和: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   階差数列: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
@@ -100,6 +101,7 @@ const TAG_COLORS: Record<string, TagColor> = {
     text: "#fff",
   },
   逆引き: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  逆引き配列: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   オフセット管理: {
     bg: "linear-gradient(135deg, #059669, #0891b2)",
     text: "#fff",
@@ -134,6 +136,8 @@ const TAG_COLORS: Record<string, TagColor> = {
     text: "#fff",
   },
   包除原理: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  主客転倒: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  全体から引く: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   場合の数: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   組み合わせ: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   直積: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
@@ -149,6 +153,7 @@ const TAG_COLORS: Record<string, TagColor> = {
     bg: "linear-gradient(135deg, #c2410c, #b91c1c)",
     text: "#fff",
   },
+  回文: { bg: "linear-gradient(135deg, #c2410c, #b91c1c)", text: "#fff" },
   ランレングス圧縮: {
     bg: "linear-gradient(135deg, #c2410c, #b91c1c)",
     text: "#fff",
@@ -172,6 +177,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   BinaryHeap: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
   stack: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
   区間クエリ: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
+  区間計算: { bg: "linear-gradient(135deg, #9333ea, #7c3aed)", text: "#fff" },
 
   // Diff
   茶Diff: { bg: "#804000", text: "#fff" },

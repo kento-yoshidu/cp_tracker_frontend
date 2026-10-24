@@ -70,6 +70,8 @@ export default function EditProblemModal({ problem, onClose }: Props) {
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0),
       difficulty: Number(form.difficulty),
+      // PUT は全項目上書きのため、送らないと既存の figure_url が消える
+      figure_url: problem.figureUrl,
     });
   };
 

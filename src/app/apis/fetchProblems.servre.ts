@@ -11,6 +11,7 @@ const map = (a: ApiGetProblemsResponse): Problem => {
     difficulty: a.difficulty,
     acCount: a.ac_count,
     lastSolvedAt: a.last_solved_at,
+    figureUrl: a.figure_url,
   };
 };
 
