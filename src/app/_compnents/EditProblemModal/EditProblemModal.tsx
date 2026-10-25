@@ -4,12 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { SubmitEvent, useState } from "react";
 import updateProblemClient from "@/app/apis/updateProblem.client";
-import type { Problem, UpdateProblemInput } from "@/types";
 import BasicModal from "../BasicModal/BasicModal";
 import Button from "../Button/Button";
 import styles from "../CreateProblemModal/createProblemModal.module.css";
 import FullScreenLoading from "../UI/FullScreenLoading";
 import SnackBar from "../UI/SnackBar";
+import type { Problem, UpdateProblemInput } from "@/types";
 
 type Props = {
   problem: Problem;
@@ -26,6 +26,7 @@ export default function EditProblemModal({ problem, onClose }: Props) {
     title: problem.title,
     tags: problem.tags.join(", "),
     difficulty: problem.difficulty?.toString() ?? "",
+    figure_url: problem.figureUrl ?? "",
   });
 
   const [snackBar, setSnackBar] = useState<{
@@ -70,8 +71,7 @@ export default function EditProblemModal({ problem, onClose }: Props) {
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0),
       difficulty: Number(form.difficulty),
-      // PUT は全項目上書きのため、送らないと既存の figure_url が消える
-      figure_url: problem.figureUrl,
+      figure_url: form.figure_url.trim() || undefined,
     });
   };
 
@@ -142,6 +142,15 @@ export default function EditProblemModal({ problem, onClose }: Props) {
               value={form.difficulty}
               onChange={handleChange("difficulty")}
               placeholder="800"
+            />
+          </label>
+
+          <label className={styles.field}>
+            <span>スライドURL</span>
+            <input
+              type="url"
+              value={form.figure_url}
+              onChange={handleChange("figure_url")}
             />
           </label>
 
