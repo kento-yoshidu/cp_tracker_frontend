@@ -25,6 +25,7 @@ const initialForm = {
   title: "",
   tags: "",
   difficulty: "",
+  figureUrl: "",
 };
 
 export default function CreateProblemModal({ open, onClose }: Props) {
@@ -72,6 +73,7 @@ export default function CreateProblemModal({ open, onClose }: Props) {
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0),
       difficulty: Number(form.difficulty),
+      figure_url: form.figureUrl.trim() || undefined,
     });
 
     setForm(initialForm);
@@ -169,6 +171,15 @@ export default function CreateProblemModal({ open, onClose }: Props) {
               value={form.difficulty}
               onChange={handleChange("difficulty")}
               placeholder="800"
+            />
+          </label>
+
+          <label className={styles.field}>
+            <span>スライドURL</span>
+            <input
+              type="url"
+              value={form.figureUrl}
+              onChange={handleChange("figureUrl")}
             />
           </label>
 
