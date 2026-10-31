@@ -10,8 +10,8 @@ export default function FigureLink({ href }: Props) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="解説図を開く"
-      title="解説図を開く"
+      aria-label="解説を開く"
+      title="解説を開く"
       className={styles.figureLink}
     >
       <svg

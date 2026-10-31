@@ -175,11 +175,12 @@ export default function CreateProblemModal({ open, onClose }: Props) {
           </label>
 
           <label className={styles.field}>
-            <span>スライドURL</span>
+            <span>解説URL（任意）</span>
             <input
-              type="url"
+              type="text"
               value={form.figureUrl}
               onChange={handleChange("figureUrl")}
+              placeholder="/figures/abc463_c.html"
             />
           </label>
 

@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ABC463 C 解説</title>
+<style>
+  :root {
+    --bg: #0b1437;
+    --panel: rgb(255 255 255 / 6%);
+    --border: rgb(255 255 255 / 15%);
+    --text: #eee;
+    --muted: #aab3cc;
+    --primary: #3b82f6;
+    --current: #f59e0b;
+    --answer: #22c55e;
+    --removed: #ef4444;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(135deg, #014 0%, #112256 100%) fixed;
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+    line-height: 1.8;
+  }
+
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 16px 64px;
+  }
+
+  h1 {
+    font-size: 26px;
+    line-height: 1.4;
+  }
+
+  h2 {
+    margin: 40px 0 12px;
+    font-size: 20px;
+  }
+
+  p + p {
+    margin-top: 8px;
+  }
+
+  .source {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a {
+    color: #93c5fd;
+  }
+
+  code {
+    font-family: Consolas, Menlo, monospace;
+  }
+
+  .player,
+  pre {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--panel);
+  }
+
+  .player {
+    padding: 20px;
+  }
+
+  .stage {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 240px;
+    overflow: hidden;
+  }
+
+  .person {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 0 0 22%;
+    height: 100%;
+    overflow: hidden;
+    transition: flex-basis 0.4s, opacity 0.4s;
+  }
+
+  .person.gone {
+    flex-basis: 0%;
+    opacity: 0;
+  }
+
+  .height {
+    font-weight: 700;
+  }
+
+  .bar {
+    width: 56px;
+    border-radius: 8px 8px 0 0;
+    background: rgb(255 255 255 / 12%);
+    transition: background-color 0.3s, opacity 0.3s;
+  }
+
+  .leave {
+    width: 100%;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .person.in-stack .bar {
+    background: var(--primary);
+  }
+
+  .person.current .bar {
+    background: var(--current);
+  }
+
+  .person.compare .bar {
+    background: var(--removed);
+  }
+
+  .person.popped .bar {
+    background: var(--removed);
+    opacity: 0.35;
+  }
+
+  .person.out-of-range {
+    opacity: 0.35;
+  }
+
+  .person.mid .bar {
+    background: var(--current);
+  }
+
+  .person.answer .bar {
+    background: var(--answer);
+  }
+
+  .explain {
+    min-height: 112px;
+    margin-top: 16px;
+  }
+
+  .explain h3 {
+    font-size: 16px;
+  }
+
+  .answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .answers div {
+    min-width: 88px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .answers div.done {
+    border-color: var(--answer);
+    color: var(--text);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  button,
+  select {
+    min-height: 44px;
+    padding: 6px 14px;
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 8px;
+    background: rgb(59 130 246 / 20%);
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:hover:not(:disabled) {
+    background: rgb(59 130 246 / 50%);
+  }
+
+  button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  select option {
+    color: #000;
+  }
+
+  .progress {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  pre {
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .person,
+    .bar {
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>ABC463 C - Tallest at the Moment</h1>
+  <p class="source"><a href="https://atcoder.jp/contests/abc463/tasks/abc463_c" target="_blank" rel="noopener noreferrer">問題ページ</a></p>
+
+  <h2>問題</h2>
+  <p>N 人の身長 H と退出時刻 L が与えられます。L は小さい順に並んでいます。各クエリ T について、T + 1/2 分後に部屋に残っている人の最大身長を答えます。</p>
+  <p>T + 1/2 分後に部屋にいるのは、L &gt; T の人です。N と Q は最大 3×10<sup>5</sup> なので、クエリごとに全員を見ていては間に合いません。</p>
+
+  <h2>考え方</h2>
+  <p>自分より<strong>背が高く、かつ自分より遅くまで残る人</strong>がいれば、その人は答えになりません。そういう人を先に除くと、残った人は身長が大きい順、退出が遅い順に並びます。</p>
+  <p>この並びなら「まだ部屋にいる人のうち先頭の人」が最大身長なので、二分探索で求められます。</p>
+
+  <h2>動かして確認する</h2>
+  <p>入力例1を使います。棒の高さが身長で、下の数字が退出時刻 L です。</p>
+
+  <section class="player" aria-label="アルゴリズムのステップ再生">
+    <div class="stage" id="stage"></div>
+
+    <div class="explain" aria-live="polite">
+      <h3 id="step-title"></h3>
+      <p id="step-text"></p>
+    </div>
+
+    <div class="answers" id="answers"></div>
+
+    <div class="controls">
+      <button type="button" id="prev">← 前へ</button>
+      <button type="button" id="play">▶ 再生</button>
+      <button type="button" id="next">次へ →</button>
+      <button type="button" id="reset">最初から</button>
+      <select id="speed" aria-label="再生速度">
+        <option value="2400">ゆっくり</option>
+        <option value="1400" selected>ふつう</option>
+        <option value="700">はやい</option>
+      </select>
+      <span class="progress" id="progress"></span>
+    </div>
+  </section>
+
+  <h2>実装（Rust）</h2>
+  <pre><code>// people は (身長, 退出時刻) で、退出時刻の昇順に並んでいる
+let mut stack: Vec&lt;(u32, u32)&gt; = Vec::new();
+
+for &amp;(h, l) in &amp;people {
+    // 新しい人は、より遅くまで残る。身長も以上なら上の人は不要
+    while stack.last().is_some_and(|&amp;(top, _)| top &lt;= h) {
+        stack.pop();
+    }
+
+    stack.push((h, l));
+}
+
+for &amp;t in &amp;queries {
+    // l &lt;= t の人はもういないので、その次の人が答え
+    let i = stack.partition_point(|&amp;(_, l)| l &lt;= t);
+
+    println!("{}", stack[i].0);
+}</code></pre>
+  <p>計算量は O(N + Q log N) です。</p>
+</main>
+
+<script>
+  const people = [
+    { h: 31, l: 4 },
+    { h: 26, l: 5 },
+    { h: 3, l: 5 },
+    { h: 15, l: 9 },
+  ];
+  const queries = [3, 4, 5, 6];
+
+  // アルゴリズムを実際に実行し、各時点の状態を steps に記録する
+  function buildSteps(people, queries) {
+    const steps = [];
+    const stack = [];
+    const popped = [];
+    const answers = [];
+
+    const record = (title, text, state = {}) => {
+      steps.push({
+        title,
+        text,
+        stack: [...stack],
+        popped: [...popped],
+        answers: [...answers],
+        ...state,
+      });
+    };
+
+    record("準備", "左から順に見て、不要な人を除いていきます。青い棒が、今残している人です。");
+
+    people.forEach((p, i) => {
+      record(
+        `${i + 1} 人目を見る`,
+        `身長 ${p.h}、退出 ${p.l} の人です。この人は今までの人より遅くまで残ります。`,
+        { current: i },
+      );
+
+      while (stack.length > 0 && people[stack.at(-1)].h <= p.h) {
+        const top = stack.at(-1);
+
+        record(
+          "不要な人を除く",
+          `身長 ${people[top].h} の人は、身長 ${p.h} 以下で、先に退出します。答えにならないので除きます。`,
+          { current: i, compare: top },
+        );
+
+        popped.push(stack.pop());
+      }
+
+      stack.push(i);
+
+      record("残す", `身長 ${p.h} の人を残します。`);
+    });
+
+    const remaining = stack.map((i) => people[i]);
+
+    record(
+      "準備完了",
+      `残った人の身長は ${remaining.map((p) => p.h).join(" > ")} と大きい順、退出は ${remaining.map((p) => p.l).join(", ")} と遅い順に並びました。`,
+      { searching: true },
+    );
+
+    queries.forEach((t) => {
+      let lo = 0;
+      let hi = stack.length;
+
+      record(`クエリ T = ${t}`, `L > ${t} を満たす最初の人を、二分探索で探します。`, {
+        searching: true,
+        lo,
+        hi,
+      });
+
+      while (lo < hi) {
+        const mid = Math.floor((lo + hi) / 2);
+        const { l } = people[stack[mid]];
+        const hasLeft = l <= t;
+
+        record(
+          `クエリ T = ${t}`,
+          hasLeft
+            ? `真ん中の人は L = ${l} ≤ ${t} で、もう退出しています。答えはこれより右です。`
+            : `真ん中の人は L = ${l} > ${t} で、まだいます。答えはこの人か、これより左です。`,
+          { searching: true, lo, hi, mid },
+        );
+
+        if (hasLeft) {
+          lo = mid + 1;
+        } else {
+          hi = mid;
+        }
+      }
+
+      const answer = people[stack[lo]].h;
+
+      answers.push(answer);
+
+      record(`T = ${t} の答えは ${answer}`, `まだいる人のうち先頭の人が、最大身長です。`, {
+        searching: true,
+        answer: lo,
+      });
+    });
+
+    record("完了", `答えは ${answers.join(", ")} です。入力例1の出力と一致します。`, {
+      searching: true,
+    });
+
+    return steps;
+  }
+
+  // --- 描画 ---
+  const steps = buildSteps(people, queries);
+  const maxHeight = Math.max(...people.map((p) => p.h));
+
+  const stage = document.getElementById("stage");
+  const titleEl = document.getElementById("step-title");
+  const textEl = document.getElementById("step-text");
+  const answersEl = document.getElementById("answers");
+  const progressEl = document.getElementById("progress");
+  const prevButton = document.getElementById("prev");
+  const nextButton = document.getElementById("next");
+  const playButton = document.getElementById("play");
+  const resetButton = document.getElementById("reset");
+  const speedSelect = document.getElementById("speed");
+
+  const personEls = people.map((p) => {
+    const el = document.createElement("div");
+    const height = document.createElement("span");
+    const bar = document.createElement("div");
+    const leave = document.createElement("span");
+
+    el.className = "person";
+    height.className = "height";
+    height.textContent = p.h;
+    bar.className = "bar";
+    bar.style.height = `${(p.h / maxHeight) * 160}px`;
+    leave.className = "leave";
+    leave.textContent = `L = ${p.l}`;
+
+    el.append(height, bar, leave);
+    stage.append(el);
+
+    return el;
+  });
+
+  const answerEls = queries.map((t) => {
+    const el = document.createElement("div");
+
+    answersEl.append(el);
+
+    return el;
+  });
+
+  let index = 0;
+  let timer = null;
+
+  function render() {
+    const step = steps[index];
+
+    personEls.forEach((el, i) => {
+      const position = step.stack.indexOf(i);
+      const inRange = position >= step.lo && position < step.hi;
+
+      el.className = "person";
+      el.classList.toggle("in-stack", position !== -1);
+      el.classList.toggle("current", step.current === i);
+      el.classList.toggle("compare", step.compare === i);
+      el.classList.toggle("popped", step.popped.includes(i));
+      el.classList.toggle("gone", Boolean(step.searching) && position === -1);
+      el.classList.toggle("out-of-range", step.lo !== undefined && !inRange);
+      el.classList.toggle("mid", step.mid !== undefined && step.mid === position);
+      el.classList.toggle("answer", step.answer !== undefined && step.answer === position);
+    });
+
+    titleEl.textContent = step.title;
+    textEl.textContent = step.text;
+    progressEl.textContent = `${index + 1} / ${steps.length}`;
+
+    answerEls.forEach((el, i) => {
+      const answer = step.answers[i];
+
+      el.textContent = `T = ${queries[i]}: ${answer ?? "?"}`;
+      el.classList.toggle("done", answer !== undefined);
+    });
+
+    prevButton.disabled = index === 0;
+    nextButton.disabled = index === steps.length - 1;
+  }
+
+  function stop() {
+    clearInterval(timer);
+    timer = null;
+    playButton.textContent = "▶ 再生";
+  }
+
+  function start() {
+    if (index === steps.length - 1) {
+      index = 0;
+      render();
+    }
+
+    playButton.textContent = "⏸ 一時停止";
+    timer = setInterval(() => {
+      index += 1;
+      render();
+
+      if (index === steps.length - 1) {
+        stop();
+      }
+    }, Number(speedSelect.value));
+  }
+
+  function moveTo(nextIndex) {
+    stop();
+    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
+    render();
+  }
+
+  prevButton.addEventListener("click", () => moveTo(index - 1));
+  nextButton.addEventListener("click", () => moveTo(index + 1));
+  resetButton.addEventListener("click", () => moveTo(0));
+
+  playButton.addEventListener("click", () => {
+    if (timer === null) {
+      start();
+    } else {
+      stop();
+    }
+  });
+
+  speedSelect.addEventListener("change", () => {
+    if (timer !== null) {
+      stop();
+      start();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      moveTo(index - 1);
+    }
+
+    if (e.key === "ArrowRight") {
+      moveTo(index + 1);
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>
