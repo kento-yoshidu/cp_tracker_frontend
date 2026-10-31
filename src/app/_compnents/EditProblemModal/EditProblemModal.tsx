@@ -146,11 +146,12 @@ export default function EditProblemModal({ problem, onClose }: Props) {
           </label>
 
           <label className={styles.field}>
-            <span>スライドURL</span>
+            <span>解説URL（任意）</span>
             <input
-              type="url"
+              type="text"
               value={form.figure_url}
               onChange={handleChange("figure_url")}
+              placeholder="/figures/abc463_c.html"
             />
           </label>
 
