@@ -90,6 +90,10 @@ const TAG_COLORS: Record<string, TagColor> = {
   rotate: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   配列スワップ: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   巡回シフト: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  最後の操作を記録: {
+    bg: "linear-gradient(135deg, #059669, #0891b2)",
+    text: "#fff",
+  },
   imos法: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   累積和: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   階差数列: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
