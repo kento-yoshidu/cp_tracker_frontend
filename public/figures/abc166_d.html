@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ABC166 D 解説</title>
+<style>
+  :root {
+    --bg: #0b1437;
+    --panel: rgb(255 255 255 / 6%);
+    --border: rgb(255 255 255 / 15%);
+    --text: #eee;
+    --muted: #aab3cc;
+    --primary: #3b82f6;
+    --current: #f59e0b;
+    --answer: #22c55e;
+    --removed: #ef4444;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(135deg, #014 0%, #112256 100%) fixed;
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+    line-height: 1.8;
+  }
+
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 16px 64px;
+  }
+
+  h1 {
+    font-size: 26px;
+    line-height: 1.4;
+  }
+
+  h2 {
+    margin: 40px 0 12px;
+    font-size: 20px;
+  }
+
+  p + p {
+    margin-top: 8px;
+  }
+
+  .source {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a {
+    color: #93c5fd;
+  }
+
+  .notice {
+    margin-top: 16px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    margin-top: 12px;
+  }
+
+  table {
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  th,
+  td {
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  th {
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  tr.over td {
+    color: var(--removed);
+    font-weight: 700;
+  }
+
+  .player {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--panel);
+  }
+
+  .grid td,
+  .grid th {
+    min-width: 56px;
+    height: 40px;
+    text-align: center;
+  }
+
+  .grid td {
+    color: rgb(255 255 255 / 25%);
+    transition: color 0.3s, background-color 0.3s, outline-color 0.3s;
+  }
+
+  .grid td.checked {
+    color: var(--muted);
+  }
+
+  .grid tr.current th {
+    color: var(--current);
+    font-weight: 700;
+  }
+
+  .grid tr.current td.checked {
+    color: var(--text);
+    background: rgb(245 158 11 / 12%);
+  }
+
+  .grid td.found {
+    color: var(--text);
+    font-weight: 700;
+    background: rgb(34 197 94 / 25%);
+    outline: 2px solid var(--answer);
+    outline-offset: -2px;
+  }
+
+  .explain {
+    min-height: 112px;
+    margin-top: 16px;
+  }
+
+  .explain h3 {
+    font-size: 16px;
+  }
+
+  .answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .answers div {
+    min-width: 88px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .answers div.done {
+    border-color: var(--answer);
+    color: var(--text);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  button,
+  select {
+    min-height: 44px;
+    padding: 6px 14px;
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 8px;
+    background: rgb(59 130 246 / 20%);
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:hover:not(:disabled) {
+    background: rgb(59 130 246 / 50%);
+  }
+
+  button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  select option {
+    color: #000;
+  }
+
+  .progress {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grid td {
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>ABC166 D - I Hate Factorization</h1>
+  <p class="source"><a href="https://atcoder.jp/contests/abc166/tasks/abc166_d" target="_blank" rel="noopener noreferrer">問題ページ</a></p>
+  <p class="notice">非公式解説です。内容はすべて Claude Code が出力しています。</p>
+
+  <h2>問題の要約</h2>
+  <p>整数 X が与えられます（1 ≤ X ≤ 10<sup>9</sup>）。A<sup>5</sup> − B<sup>5</sup> = X となる整数の組 (A, B) を 1 つ求める問題です。答えが存在することは保証されています。</p>
+
+  <h2>考え方</h2>
+  <p>A と B の候補を<strong>両方とも全部試します</strong>。問題は「どの範囲を試せばいいか」です。</p>
+  <p>隣り合う整数の 5 乗の差 n<sup>5</sup> − (n − 1)<sup>5</sup> は、n が大きくなるほど広がります。下の表のとおり、n = 120 で 10<sup>9</sup> を超えます。A が 120 くらいより大きいと、B をどう選んでも A<sup>5</sup> − B<sup>5</sup> は X を飛び越えてしまいます。なので、答えの A, B は<strong>絶対値が 120 くらいまで</strong>に収まります。</p>
+
+  <div class="table-scroll"><table id="diff-table"></table></div>
+
+  <p style="margin-top: 12px">余裕をもって A, B を <strong>−1000〜1000</strong> で試せば確実です。2001 × 2001 ≈ 4 × 10<sup>6</sup> 通りなので間に合います。1000<sup>5</sup> = 10<sup>15</sup> なので、64bit 整数でオーバーフローもしません。</p>
+
+  <h2>動かして確認する</h2>
+  <p>入力例1（X = 33）を使います。図にするため、A, B の範囲を −3〜3 に縮めています。マスの数字が A<sup>5</sup> − B<sup>5</sup> です。A を 1 つ決めるごとに、B を −3 から順に試します。</p>
+
+  <section class="player" aria-label="アルゴリズムのステップ再生">
+    <div class="table-scroll"><table class="grid" id="grid"></table></div>
+
+    <div class="explain" aria-live="polite">
+      <h3 id="step-title"></h3>
+      <p id="step-text"></p>
+    </div>
+
+    <div class="answers" id="answers"></div>
+
+    <div class="controls">
+      <button type="button" id="prev">← 前へ</button>
+      <button type="button" id="play">▶ 再生</button>
+      <button type="button" id="next">次へ →</button>
+      <button type="button" id="reset">最初から</button>
+      <select id="speed" aria-label="再生速度">
+        <option value="2400">ゆっくり</option>
+        <option value="1400" selected>ふつう</option>
+        <option value="700">はやい</option>
+      </select>
+      <span class="progress" id="progress"></span>
+    </div>
+  </section>
+</main>
+
+<script>
+  const x = 33;
+  const lo = -3;
+  const hi = 3;
+
+  const pow5 = (v) => v ** 5;
+
+  // --- 隣り合う 5 乗の差の表 ---
+  const diffTable = document.getElementById("diff-table");
+  let diffHtml = "<tr><th>n</th><th>n<sup>5</sup></th><th>n<sup>5</sup> − (n − 1)<sup>5</sup></th></tr>";
+
+  [1, 2, 10, 50, 100, 119, 120].forEach((v) => {
+    const d = pow5(v) - pow5(v - 1);
+
+    diffHtml += `<tr class="${d > 1e9 ? "over" : ""}"><td>${v}</td><td>${pow5(v).toLocaleString()}</td><td>${d.toLocaleString()}</td></tr>`;
+  });
+
+  diffTable.innerHTML = diffHtml;
+
+  // アルゴリズムを実際に実行し、各時点の状態を steps に記録する
+  function buildSteps(x, lo, hi) {
+    const steps = [];
+    let current = null;
+    let lastB = null;
+    let found = null;
+
+    const record = (title, text) => {
+      steps.push({ title, text, current, lastB, found });
+    };
+
+    record("準備", `X = ${x} です。A = ${lo} から順に、A<sup>5</sup> − B<sup>5</sup> が ${x} になる B を探します。`);
+
+    for (let a = lo; a <= hi; a++) {
+      current = a;
+
+      for (let b = lo; b <= hi; b++) {
+        lastB = b;
+
+        if (pow5(a) - pow5(b) === x) {
+          found = { a, b };
+
+          record(
+            `A = ${a} のとき：見つかった`,
+            `B = ${b} で ${a}<sup>5</sup> − (${b})<sup>5</sup> = ${pow5(a)} − (${pow5(b)}) = ${x} になりました。ここで return するので、残りは調べません。`,
+          );
+
+          record(
+            `答えは (${a}, ${b})`,
+            `A = ${a}, B = ${b} です。入力例1の出力は 2 −1 ですが、答えが複数あるときはどれを出してもよいので、これも正解です。`,
+          );
+
+          return steps;
+        }
+      }
+
+      record(
+        `A = ${a} のとき`,
+        `B = ${lo}〜${hi} を全部試しましたが、${x} になるものはありませんでした。次の A に進みます。`,
+      );
+    }
+
+    return steps;
+  }
+
+  // --- 描画 ---
+  const steps = buildSteps(x, lo, hi);
+
+  const gridEl = document.getElementById("grid");
+  const titleEl = document.getElementById("step-title");
+  const textEl = document.getElementById("step-text");
+  const answersEl = document.getElementById("answers");
+  const progressEl = document.getElementById("progress");
+  const prevButton = document.getElementById("prev");
+  const nextButton = document.getElementById("next");
+  const playButton = document.getElementById("play");
+  const resetButton = document.getElementById("reset");
+  const speedSelect = document.getElementById("speed");
+
+  const headRow = document.createElement("tr");
+  const corner = document.createElement("th");
+
+  corner.textContent = "A \\ B";
+  headRow.append(corner);
+
+  for (let b = lo; b <= hi; b++) {
+    const th = document.createElement("th");
+
+    th.textContent = b;
+    headRow.append(th);
+  }
+
+  gridEl.append(headRow);
+
+  const rowEls = [];
+  const cellEls = [];
+
+  for (let a = lo; a <= hi; a++) {
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    const cells = [];
+
+    th.textContent = a;
+    tr.append(th);
+
+    for (let b = lo; b <= hi; b++) {
+      const td = document.createElement("td");
+
+      td.textContent = pow5(a) - pow5(b);
+      tr.append(td);
+      cells.push(td);
+    }
+
+    gridEl.append(tr);
+    rowEls.push(tr);
+    cellEls.push(cells);
+  }
+
+  const answerEl = document.createElement("div");
+
+  answersEl.append(answerEl);
+
+  let index = 0;
+  let timer = null;
+
+  function render() {
+    const step = steps[index];
+
+    cellEls.forEach((cells, i) => {
+      const a = lo + i;
+
+      rowEls[i].classList.toggle("current", step.current === a);
+
+      cells.forEach((td, j) => {
+        const b = lo + j;
+        // 今の A より前の行は全部、今の A の行は lastB まで調べ終わっている
+        const checked =
+          step.lastB !== null && (a < step.current || (a === step.current && b <= step.lastB));
+
+        td.classList.toggle("checked", checked);
+        td.classList.toggle("found", step.found !== null && step.found.a === a && step.found.b === b);
+      });
+    });
+
+    titleEl.textContent = step.title;
+    textEl.innerHTML = step.text;
+    progressEl.textContent = `${index + 1} / ${steps.length}`;
+
+    answerEl.textContent = `答え: ${step.found ? `${step.found.a} ${step.found.b}` : "?"}`;
+    answerEl.classList.toggle("done", step.found !== null);
+
+    prevButton.disabled = index === 0;
+    nextButton.disabled = index === steps.length - 1;
+  }
+
+  function stop() {
+    clearInterval(timer);
+    timer = null;
+    playButton.textContent = "▶ 再生";
+  }
+
+  function start() {
+    if (index === steps.length - 1) {
+      index = 0;
+      render();
+    }
+
+    playButton.textContent = "⏸ 一時停止";
+    timer = setInterval(() => {
+      index += 1;
+      render();
+
+      if (index === steps.length - 1) {
+        stop();
+      }
+    }, Number(speedSelect.value));
+  }
+
+  function moveTo(nextIndex) {
+    stop();
+    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
+    render();
+  }
+
+  prevButton.addEventListener("click", () => moveTo(index - 1));
+  nextButton.addEventListener("click", () => moveTo(index + 1));
+  resetButton.addEventListener("click", () => moveTo(0));
+
+  playButton.addEventListener("click", () => {
+    if (timer === null) {
+      start();
+    } else {
+      stop();
+    }
+  });
+
+  speedSelect.addEventListener("change", () => {
+    if (timer !== null) {
+      stop();
+      start();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      moveTo(index - 1);
+    }
+
+    if (e.key === "ArrowRight") {
+      moveTo(index + 1);
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>
