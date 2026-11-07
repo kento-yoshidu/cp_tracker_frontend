@@ -81,6 +81,10 @@ const TAG_COLORS: Record<string, TagColor> = {
   // 貪欲・実装トリック
   貪欲法: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   simulation: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  シミュレーション: {
+    bg: "linear-gradient(135deg, #059669, #0891b2)",
+    text: "#fff",
+  },
   "two-pointers": {
     bg: "linear-gradient(135deg, #059669, #0891b2)",
     text: "#fff",
@@ -127,6 +131,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   },
   mod: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   最小公倍数: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
+  偶奇: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   bit: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   geometry: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
   bit全探索: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
