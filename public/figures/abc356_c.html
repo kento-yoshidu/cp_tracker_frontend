@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ABC356 C 解説</title>
+<style>
+  :root {
+    --bg: #0b1437;
+    --panel: rgb(255 255 255 / 6%);
+    --border: rgb(255 255 255 / 15%);
+    --text: #eee;
+    --muted: #aab3cc;
+    --primary: #3b82f6;
+    --current: #f59e0b;
+    --answer: #22c55e;
+    --removed: #ef4444;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(135deg, #014 0%, #112256 100%) fixed;
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+    line-height: 1.8;
+  }
+
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 16px 64px;
+  }
+
+  h1 {
+    font-size: 26px;
+    line-height: 1.4;
+  }
+
+  h2 {
+    margin: 40px 0 12px;
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  p + p {
+    margin-top: 8px;
+  }
+
+  ul {
+    margin: 8px 0 0 1.5em;
+  }
+
+  .source {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  a {
+    color: #93c5fd;
+  }
+
+  .notice {
+    margin-top: 16px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .player {
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--panel);
+  }
+
+  .label {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .keys {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .key {
+    min-width: 72px;
+    padding: 4px 10px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    text-align: center;
+    font-size: 14px;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+  }
+
+  .key b {
+    display: block;
+    font-size: 16px;
+  }
+
+  .key.real {
+    border-color: var(--current);
+    background: rgb(245 158 11 / 15%);
+  }
+
+  .key.dummy {
+    color: var(--muted);
+    border-style: dashed;
+  }
+
+  .bit {
+    margin-left: 8px;
+    color: var(--muted);
+    font-family: ui-monospace, Consolas, monospace;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    margin-top: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  th {
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  tr.pending td {
+    color: rgb(255 255 255 / 35%);
+  }
+
+  tr.current td {
+    background: rgb(59 130 246 / 15%);
+  }
+
+  td.ok {
+    color: var(--answer);
+    font-weight: 700;
+  }
+
+  td.ng {
+    color: var(--removed);
+    font-weight: 700;
+  }
+
+  .mini {
+    display: inline-block;
+    min-width: 24px;
+    margin: 0 2px;
+    padding: 0 6px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+
+  .mini.real {
+    border-color: var(--current);
+    color: var(--current);
+    font-weight: 700;
+  }
+
+  .mini.dummy {
+    color: var(--muted);
+    border-style: dashed;
+  }
+
+  .explain {
+    min-height: 112px;
+    margin-top: 16px;
+  }
+
+  .combos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .combos div {
+    min-width: 88px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .combos div.current {
+    border-color: var(--primary);
+    color: var(--text);
+  }
+
+  .combos div.ok {
+    border-color: var(--answer);
+    color: var(--text);
+  }
+
+  .combos div.ng {
+    border-color: var(--removed);
+    color: var(--removed);
+    text-decoration: line-through;
+  }
+
+  .answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .answers div {
+    min-width: 88px;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .answers div.done {
+    border-color: var(--answer);
+    color: var(--text);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  button,
+  select {
+    min-height: 44px;
+    padding: 6px 14px;
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 8px;
+    background: rgb(59 130 246 / 20%);
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:hover:not(:disabled) {
+    background: rgb(59 130 246 / 50%);
+  }
+
+  button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  select option {
+    color: #000;
+  }
+
+  .progress {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .key {
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>ABC356 C - Keys</h1>
+  <p class="source"><a href="https://atcoder.jp/contests/abc356/tasks/abc356_c" target="_blank" rel="noopener noreferrer">問題ページ</a></p>
+  <p class="notice">非公式解説です。内容はすべて Claude Code が出力しています。</p>
+
+  <h2>問題の要約</h2>
+  <p>N 本の鍵があり、それぞれ本物かダミーのどちらかです。<strong>どれが本物かは分かりません。</strong>扉は、本物の鍵を K 本以上挿すと開きます。</p>
+  <p>M 回のテストの記録（挿した鍵と、開いたかどうか）が与えられます。この記録と<strong>食い違わない「本物の組み合わせ」が何通りあるか</strong>を求める問題です。</p>
+
+  <h2>考え方</h2>
+  <p>どれが本物か分からないので、<strong>「本物はこれとこれ」と仮に決めてしまいます</strong>。仮に決めれば、各テストで挿した本物の本数が数えられるので、記録と食い違わないか確かめられます。</p>
+  <p>どう決めるのが正しいかは分からないので、<strong>ありえる決め方を全部試します</strong>。鍵 1 本につき本物かダミーの 2 通りなので、全部で 2<sup>N</sup> 通りです。N ≤ 15 なので 2<sup>15</sup> = 32768 通りしかありません。</p>
+  <p>決め方は整数 bit で表します。bit の右から (j − 1) 桁目が 1 なら「鍵 j は本物」です。例えば bit = 5（2 進数で 101）は「鍵 1 と鍵 3 が本物」です。</p>
+  <p>決め方を 1 つ選んだら、記録を 1 つずつ見て、次のどちらかになったら食い違いです。</p>
+  <ul>
+    <li>本物が K 本以上で、扉は開くはずなのに、記録は x（開かなかった）</li>
+    <li>本物が K 本未満で、扉は開かないはずなのに、記録は o（開いた）</li>
+  </ul>
+  <p>どの記録とも食い違わなければ、答えに 1 を足します。計算量は O(2<sup>N</sup> × M × N) で、最大でも 5 × 10<sup>7</sup> 回程度です。</p>
+
+  <h2>動かして確認する</h2>
+  <p>入力例1（N = 3, K = 2）を使います。記録は「鍵 1, 2, 3 を挿したら開いた」「鍵 2, 3 を挿したら開かなかった」の 2 つです。</p>
+
+  <section class="player" aria-label="アルゴリズムのステップ再生">
+    <p class="label">今試している決め方<span class="bit" id="bit"></span></p>
+    <div class="keys" id="keys"></div>
+
+    <div class="table-scroll"><table id="records"></table></div>
+
+    <div class="explain" aria-live="polite">
+      <h3 id="step-title"></h3>
+      <p id="step-text"></p>
+    </div>
+
+    <p class="label">決め方 8 通り（緑 = 食い違いなし、赤 = 食い違いあり）</p>
+    <div class="combos" id="combos"></div>
+
+    <div class="answers" id="answers"></div>
+
+    <div class="controls">
+      <button type="button" id="prev">← 前へ</button>
+      <button type="button" id="play">▶ 再生</button>
+      <button type="button" id="next">次へ →</button>
+      <button type="button" id="reset">最初から</button>
+      <select id="speed" aria-label="再生速度">
+        <option value="2400">ゆっくり</option>
+        <option value="1400" selected>ふつう</option>
+        <option value="700">はやい</option>
+      </select>
+      <span class="progress" id="progress"></span>
+    </div>
+  </section>
+</main>
+
+<script>
+  const n = 3;
+  const k = 2;
+  const tests = [
+    { keys: [1, 2, 3], result: "o" },
+    { keys: [2, 3], result: "x" },
+  ];
+
+  const isReal = (bit, j) => (bit & (1 << (j - 1))) !== 0;
+  const binary = (bit) => bit.toString(2).padStart(n, "0");
+  const realList = (bit) => {
+    const list = [];
+
+    for (let j = 1; j <= n; j++) {
+      if (isReal(bit, j)) {
+        list.push(j);
+      }
+    }
+
+    return list.length === 0 ? "なし" : list.map((j) => `鍵${j}`).join("・");
+  };
+
+  // アルゴリズムを実際に実行し、各時点の状態を steps に記録する
+  function buildSteps(n, k, tests) {
+    const steps = [];
+    const verdicts = [];
+    let bit = null;
+    let checks = [];
+    let current = null;
+    let ans = 0;
+    let done = false;
+
+    const record = (title, text) => {
+      steps.push({
+        title,
+        text,
+        bit,
+        checks: checks.map((c) => ({ ...c })),
+        current,
+        verdicts: [...verdicts],
+        ans,
+        done,
+      });
+    };
+
+    record(
+      "準備",
+      `鍵が ${n} 本なので、本物・ダミーの決め方は 2^${n} = ${2 ** n} 通りです。bit = 0〜${2 ** n - 1} で 1 つずつ試します。`,
+    );
+
+    for (bit = 0; bit < 2 ** n; bit++) {
+      let flag = true;
+
+      checks = [];
+      current = null;
+
+      record(
+        `bit = ${bit}（${binary(bit)}）を試す`,
+        `本物は ${realList(bit)} と仮に決めます。この決め方で、記録と食い違わないか 1 つずつ確かめます。`,
+      );
+
+      tests.forEach((t, i) => {
+        const count = t.keys.filter((j) => isReal(bit, j)).length;
+        const expected = count >= k ? "o" : "x";
+        const ok = expected === t.result;
+
+        if (!ok) {
+          flag = false;
+        }
+
+        checks[i] = { count, expected, ok };
+        current = i;
+
+        const head = `記録${i + 1}：挿した鍵 ${t.keys.join(", ")} のうち、本物は ${count} 本です。`;
+        const guess =
+          count >= k
+            ? `${k} 本以上なので開くはずです。`
+            : `${k} 本未満なので開かないはずです。`;
+        const actual = t.result === "o" ? "記録は開いた（o）" : "記録は開かなかった（x）";
+        const tail = ok
+          ? `${actual}ので、食い違いはありません。`
+          : `でも${actual}ので、食い違いです。flag = false にします。`;
+
+        record(`bit = ${bit}：記録${i + 1}を確かめる`, `${head}${guess}${tail}`);
+      });
+
+      current = null;
+      verdicts[bit] = flag;
+
+      if (flag) {
+        ans += 1;
+      }
+
+      record(
+        flag ? `bit = ${bit}：食い違いなし` : `bit = ${bit}：食い違いあり`,
+        flag
+          ? `どの記録とも食い違わなかったので、「本物は ${realList(bit)}」はありえる決め方です。ans に 1 を足して ${ans} です。`
+          : `食い違った記録があったので、「本物は ${realList(bit)}」はありえません。ans は ${ans} のままです。`,
+      );
+    }
+
+    bit = null;
+    checks = [];
+    done = true;
+
+    record(
+      `答えは ${ans}`,
+      `8 通りすべて試しました。記録と食い違わなかったのは ${verdicts.map((v, b) => (v ? `「${realList(b)}」` : null)).filter(Boolean).join("と")} の ${ans} 通りです。入力例1の出力と一致します。`,
+    );
+
+    return steps;
+  }
+
+  // --- 描画 ---
+  const steps = buildSteps(n, k, tests);
+
+  const bitEl = document.getElementById("bit");
+  const keysEl = document.getElementById("keys");
+  const recordsEl = document.getElementById("records");
+  const titleEl = document.getElementById("step-title");
+  const textEl = document.getElementById("step-text");
+  const combosEl = document.getElementById("combos");
+  const answersEl = document.getElementById("answers");
+  const progressEl = document.getElementById("progress");
+  const prevButton = document.getElementById("prev");
+  const nextButton = document.getElementById("next");
+  const playButton = document.getElementById("play");
+  const resetButton = document.getElementById("reset");
+  const speedSelect = document.getElementById("speed");
+
+  const keyEls = Array.from({ length: n }, (_, i) => {
+    const el = document.createElement("div");
+
+    el.className = "key";
+    keysEl.append(el);
+
+    return el;
+  });
+
+  const comboEls = Array.from({ length: 2 ** n }, (_, b) => {
+    const el = document.createElement("div");
+
+    el.innerHTML = `bit = ${b}<br>${realList(b)}`;
+    combosEl.append(el);
+
+    return el;
+  });
+
+  const answerEl = document.createElement("div");
+
+  answersEl.append(answerEl);
+
+  let index = 0;
+  let timer = null;
+
+  function render() {
+    const step = steps[index];
+    const hasBit = step.bit !== null;
+
+    bitEl.textContent = hasBit ? `bit = ${step.bit}（${binary(step.bit)}）` : "";
+
+    keyEls.forEach((el, i) => {
+      const real = hasBit && isReal(step.bit, i + 1);
+
+      el.classList.toggle("real", real);
+      el.classList.toggle("dummy", hasBit && !real);
+      el.innerHTML = `<b>鍵${i + 1}</b>${hasBit ? (real ? "本物" : "ダミー") : "?"}`;
+    });
+
+    let html = "<tr><th>記録</th><th>挿した鍵</th><th>本物の本数</th><th>予想</th><th>記録の結果</th><th>判定</th></tr>";
+
+    tests.forEach((t, i) => {
+      const c = step.checks[i];
+      const keys = t.keys
+        .map((j) => {
+          const cls = !hasBit ? "" : isReal(step.bit, j) ? "real" : "dummy";
+
+          return `<span class="mini ${cls}">${j}</span>`;
+        })
+        .join("");
+      const resultText = t.result === "o" ? "o（開いた）" : "x（開かなかった）";
+
+      html += `<tr class="${c ? "" : "pending"} ${step.current === i ? "current" : ""}">`;
+      html += `<td>${i + 1}</td><td>${keys}</td>`;
+      html += c
+        ? `<td>${c.count}</td><td>${c.expected === "o" ? "開くはず" : "開かないはず"}</td>`
+        : "<td></td><td></td>";
+      html += `<td>${resultText}</td>`;
+      html += c ? `<td class="${c.ok ? "ok" : "ng"}">${c.ok ? "○" : "✗"}</td>` : "<td></td>";
+      html += "</tr>";
+    });
+
+    recordsEl.innerHTML = html;
+
+    titleEl.textContent = step.title;
+    textEl.textContent = step.text;
+    progressEl.textContent = `${index + 1} / ${steps.length}`;
+
+    comboEls.forEach((el, b) => {
+      const v = step.verdicts[b];
+
+      el.classList.toggle("current", step.bit === b);
+      el.classList.toggle("ok", v === true);
+      el.classList.toggle("ng", v === false);
+    });
+
+    answerEl.textContent = `ans: ${step.ans}`;
+    answerEl.classList.toggle("done", step.done);
+
+    prevButton.disabled = index === 0;
+    nextButton.disabled = index === steps.length - 1;
+  }
+
+  function stop() {
+    clearInterval(timer);
+    timer = null;
+    playButton.textContent = "▶ 再生";
+  }
+
+  function start() {
+    if (index === steps.length - 1) {
+      index = 0;
+      render();
+    }
+
+    playButton.textContent = "⏸ 一時停止";
+    timer = setInterval(() => {
+      index += 1;
+      render();
+
+      if (index === steps.length - 1) {
+        stop();
+      }
+    }, Number(speedSelect.value));
+  }
+
+  function moveTo(nextIndex) {
+    stop();
+    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
+    render();
+  }
+
+  prevButton.addEventListener("click", () => moveTo(index - 1));
+  nextButton.addEventListener("click", () => moveTo(index + 1));
+  resetButton.addEventListener("click", () => moveTo(0));
+
+  playButton.addEventListener("click", () => {
+    if (timer === null) {
+      start();
+    } else {
+      stop();
+    }
+  });
+
+  speedSelect.addEventListener("change", () => {
+    if (timer !== null) {
+      stop();
+      start();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      moveTo(index - 1);
+    }
+
+    if (e.key === "ArrowRight") {
+      moveTo(index + 1);
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>
