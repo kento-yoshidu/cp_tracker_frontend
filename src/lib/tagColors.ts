@@ -20,6 +20,10 @@ const TAG_COLORS: Record<string, TagColor> = {
   経路数: { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
   到達可能性: { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
   グリッド: { bg: "linear-gradient(135deg, #0891b2, #0284c7)", text: "#fff" },
+  グラフに置き換える: {
+    bg: "linear-gradient(135deg, #0891b2, #0284c7)",
+    text: "#fff",
+  },
 
   // 最短経路
   最短経路: { bg: "linear-gradient(135deg, #1d4ed8, #4338ca)", text: "#fff" },
@@ -122,6 +126,7 @@ const TAG_COLORS: Record<string, TagColor> = {
   },
   一方を固定: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
   制約に注目: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
+  中央に寄せる: { bg: "linear-gradient(135deg, #059669, #0891b2)", text: "#fff" },
 
   // 数学
   math: { bg: "linear-gradient(135deg, #db2777, #be185d)", text: "#fff" },
