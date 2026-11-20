@@ -73,6 +73,10 @@ a {
   margin-top: 16px;
 }
 
+.explain h3 {
+  font-size: 16px;
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -96,4 +100,29 @@ button {
   margin-left: auto;
   color: var(--muted);
   font-size: 14px;
+}
+
+.label {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.answers div {
+  min-width: 88px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.answers div.done {
+  border-color: var(--answer);
+  color: var(--text);
+}
+
+td.ok {
+  color: var(--answer);
+  font-weight: 700;
 }
