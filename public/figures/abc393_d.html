@@ -195,6 +195,7 @@
   </section>
 </main>
 
+<script src="./common/stepper.v1.js"></script>
 <script>
   const s = "0101001";
 
@@ -282,22 +283,13 @@
 
   const stripEl = document.getElementById("strip");
   const rowsEl = document.getElementById("rows");
-  const titleEl = document.getElementById("step-title");
-  const textEl = document.getElementById("step-text");
   const answersEl = document.getElementById("answers");
-  const progressEl = document.getElementById("progress");
-  const prevButton = document.getElementById("prev");
-  const nextButton = document.getElementById("next");
-  const resetButton = document.getElementById("reset");
 
   const answerEl = document.createElement("div");
 
   answersEl.append(answerEl);
 
-  let index = 0;
-
-  function render() {
-    const step = steps[index];
+  function render(step) {
     const known = step.points.length > 0;
 
     // 上の段：元の S、下の段：行き先
@@ -365,37 +357,11 @@
 
     rowsEl.innerHTML = known ? table : "";
 
-    titleEl.textContent = step.title;
-    textEl.textContent = step.text;
-    progressEl.textContent = `${index + 1} / ${steps.length}`;
-
     answerEl.textContent = `ans: ${step.ans}`;
     answerEl.classList.toggle("done", step.done);
-
-    prevButton.disabled = index === 0;
-    nextButton.disabled = index === steps.length - 1;
   }
 
-  function moveTo(nextIndex) {
-    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
-    render();
-  }
-
-  prevButton.addEventListener("click", () => moveTo(index - 1));
-  nextButton.addEventListener("click", () => moveTo(index + 1));
-  resetButton.addEventListener("click", () => moveTo(0));
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") {
-      moveTo(index - 1);
-    }
-
-    if (e.key === "ArrowRight") {
-      moveTo(index + 1);
-    }
-  });
-
-  render();
+  createStepper({ steps, render });
 </script>
 </body>
 </html>

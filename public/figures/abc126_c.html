@@ -142,6 +142,7 @@
   </section>
 </main>
 
+<script src="./common/stepper.v1.js"></script>
 <script>
   const n = 3;
   const k = 10;
@@ -257,13 +258,7 @@
 
   const diceEl = document.getElementById("dice");
   const chainEl = document.getElementById("chain");
-  const titleEl = document.getElementById("step-title");
-  const textEl = document.getElementById("step-text");
   const answersEl = document.getElementById("answers");
-  const progressEl = document.getElementById("progress");
-  const prevButton = document.getElementById("prev");
-  const nextButton = document.getElementById("next");
-  const resetButton = document.getElementById("reset");
 
   const dieEls = Array.from({ length: n }, (_, i) => {
     const el = document.createElement("div");
@@ -286,11 +281,7 @@
 
   answersEl.append(sumEl, answerEl);
 
-  let index = 0;
-
-  function render() {
-    const step = steps[index];
-
+  function render(step) {
     dieEls.forEach((el, i) => {
       const count = step.probs[i];
 
@@ -327,38 +318,12 @@
       }),
     );
 
-    titleEl.textContent = step.title;
-    textEl.textContent = step.text;
-    progressEl.textContent = `${index + 1} / ${steps.length}`;
-
     sumEl.textContent = `ans: ${fraction(step.num, den)}`;
     answerEl.textContent = `答え: ${step.done ? fraction(step.num, den * n) : "?"}`;
     answerEl.classList.toggle("done", step.done);
-
-    prevButton.disabled = index === 0;
-    nextButton.disabled = index === steps.length - 1;
   }
 
-  function moveTo(nextIndex) {
-    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
-    render();
-  }
-
-  prevButton.addEventListener("click", () => moveTo(index - 1));
-  nextButton.addEventListener("click", () => moveTo(index + 1));
-  resetButton.addEventListener("click", () => moveTo(0));
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") {
-      moveTo(index - 1);
-    }
-
-    if (e.key === "ArrowRight") {
-      moveTo(index + 1);
-    }
-  });
-
-  render();
+  createStepper({ steps, render });
 </script>
 </body>
 </html>

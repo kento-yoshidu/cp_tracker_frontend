@@ -1,6 +1,6 @@
 ---
 name: figure-page
-description: 競プロ問題の解説ページ（public/figures/*.html）を新規作成・修正するときの仕様。共通CSS（common/base.v1.css）の使い方、HTMLの骨組み、ステップ再生UIの約束、守るべきルールをまとめている。「解説ページを作って」「figureを作って」などで使う。
+description: 競プロ問題の解説ページ（public/figures/*.html）を新規作成・修正するときの仕様。共通CSS（common/base.v1.css）と共通JS（common/stepper.v1.js）の使い方、HTMLの骨組み、ステップ送りUIの約束、守るべきルールをまとめている。「解説ページを作って」「figureを作って」などで使う。
 ---
 
 # 解説ページ（figures）の仕様
@@ -9,9 +9,10 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
 
 ## 置き場所と参照
 
-- ページ: `public/figures/<問題ID>.html`（例: `abc463_c.html`。AtCoder のタスクIDに合わせる）
-- 共通ファイル: `public/figures/common/`
-  - `base.v1.css` … 全ページ共通のCSS（**作業前に必ず実物を読むこと**）
+- ページ: `public/figures/<問題ID>.html`（例: `abc463_c.html`。AtCoder のタスクIDに合わせる。鉄則本などは `tessoku_a42.html` のように出典を接頭辞にする）
+- 共通ファイル: `public/figures/common/`（**作業前に必ず実物を読むこと**）
+  - `base.v1.css` … 全ページ共通のCSS
+  - `stepper.v1.js` … 全ページ共通のステップ送り（`createStepper`）
 - アプリからは問題データの `figure_url` に `/figures/<問題ID>.html` を設定して開く（フルURLは使わない）
 - 見本
   - 図が主役: `public/figures/abc463_c.html`
@@ -77,6 +78,7 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
   </section>
 </main>
 
+<script src="./common/stepper.v1.js"></script>
 <script>
   // 下の「JS」を参照
 </script>
@@ -96,7 +98,7 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
 | 変数 | `:root`（`--bg` `--panel` `--border` `--text` `--muted` `--primary` `--current` `--answer` `--removed`） |
 | 土台 | `*` `body` `main` `h1` `h2` `p + p` `a` |
 | ヘッダー | `.source` `.notice` |
-| 再生UI | `.player` `.explain` `.explain h3` `.controls` `.progress` |
+| ステップUI | `.player` `.explain` `.explain h3` `.controls` `.progress` |
 | フォーム | `button, select`（ボタン・セレクト本体） `select option` `button:disabled` `button:hover:not(:disabled)` |
 | 部品 | `.label`（図の上の小見出し） `.answers div` `.answers div.done`（答えのチップ） `td.ok`（表の正解セル） |
 
@@ -111,19 +113,57 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
 
 ## JS
 
-現在は各ページの `<script>` に直書きしている（共通化は予定のみ、`common/stepper.v1.js` として切り出す予定）。既存ページと同じ構成で書く。
+ステップ送りは `common/stepper.v1.js` の `createStepper` に任せ、ページには「データ・ステップ生成・描画」だけを書く。
 
-1. 入力例を定数で持つ
-2. `buildSteps(...)` で、各ステップの状態を `{ title, text, ...状態 }` の配列として先に全部作る
-3. `render()` で `steps[index]` を描画し、最後に次を必ず行う
-   - `titleEl` / `textEl` にタイトル・説明を入れる
-   - `progressEl.textContent = \`${index + 1} / ${steps.length}\``
-   - `prevButton.disabled = index === 0; nextButton.disabled = index === steps.length - 1;`
-4. `moveTo`、ボタン（前へ / 次へ / 最初から）と矢印キー（←→）の配線は既存ページ（`abc463_c.html`）からコピーする
+`createStepper` が受け持つこと（**ページ側で書かない**）:
+
+- `#step-title` / `#step-text` / `#progress` / `#prev` / `#next` / `#reset` の取得
+- タイトル・説明の表示、`1 / N` の表示、前へ・次へボタンの無効化
+- 前へ / 次へ / 最初から ボタンと ←→ キーの配線、最初の描画
+
+ページ側の構成:
+
+```js
+  // 1. 入力例を定数で持つ
+  const n = 5;
+
+  // 2. 各ステップの状態を { title, text, ...状態 } の配列として先に全部作る
+  function buildSteps(n) {
+    const steps = [];
+    // steps.push({ title: "準備", text: "…", ... });
+    return steps;
+  }
+
+  const steps = buildSteps(n);
+
+  // 3. 図などの要素を作る（ページ固有）
+
+  // 4. 1ステップ分の描画（タイトル・説明・進捗・ボタンは書かない）
+  function render(step, { index, steps }) {
+    // step の状態を図に反映する
+  }
+
+  // 5. 最後に呼ぶ（render より後ろで宣言した変数も使えるよう、末尾に置く）
+  createStepper({ steps, render });
+```
+
+- `render` の第2引数 `{ index, steps }` は必要なときだけ受け取る（例: 最後のステップを参照する `abc123_c.html`）
+- 説明文に HTML（`<strong>` など）を使う場合は `createStepper({ steps, render, html: true })`（例: `abc166_d.html`）
+- 入力例を切り替える場合は、戻り値の `setSteps` で作り直す。先頭のステップに戻る（例: `abc484_c.html`）
+
+```js
+  const stepper = createStepper({ steps, render });
+
+  exampleSelect.addEventListener("change", () => {
+    example = examples[Number(exampleSelect.value)];
+    stepper.setSteps(buildSteps(example.a, example.b));
+  });
+```
 
 ## 共通ファイルを変えるとき
 
-- **既存の `base.v1.css` は上書きしない**（全ページの見た目が変わるため）。互換のない変更は `base.v2.css` を新規作成し、使うページだけ切り替える
+- **既存の `base.v1.css` / `stepper.v1.js` は上書きしない**（全ページに影響するため）。互換のない変更は `base.v2.css` / `stepper.v2.js` を新規作成し、使うページだけ切り替える
+- `stepper.v1.js` は `type="module"` にしない（`file://` で開いたときに動かなくなるため）。公開するのは `window.createStepper` のみ
 - 共通ファイルには stylelint がかかる: `npx stylelint "public/figures/common/*.css"`（`no-descending-specificity` に注意）
 
 ## 仕上げの確認

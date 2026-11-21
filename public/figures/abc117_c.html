@@ -169,6 +169,7 @@
   </section>
 </main>
 
+<script src="./common/stepper.v1.js"></script>
 <script>
   const n = 2;
   const x = [10, 12, 1, 2, 14];
@@ -267,14 +268,8 @@
   const position = (v) => 6 + ((v - min) / (max - min)) * 88;
 
   const stage = document.getElementById("stage");
-  const titleEl = document.getElementById("step-title");
-  const textEl = document.getElementById("step-text");
   const chipsEl = document.getElementById("chips");
   const answersEl = document.getElementById("answers");
-  const progressEl = document.getElementById("progress");
-  const prevButton = document.getElementById("prev");
-  const nextButton = document.getElementById("next");
-  const resetButton = document.getElementById("reset");
 
   const gapEls = gaps.map((d, i) => {
     const el = document.createElement("div");
@@ -313,11 +308,7 @@
 
   answersEl.append(totalEl, cutEl, answerEl);
 
-  let index = 0;
-
-  function render() {
-    const step = steps[index];
-
+  function render(step) {
     gapEls.forEach((el, i) => {
       const isRemoved = step.removed.includes(i);
 
@@ -344,39 +335,13 @@
       }),
     );
 
-    titleEl.textContent = step.title;
-    textEl.textContent = step.text;
-    progressEl.textContent = `${index + 1} / ${steps.length}`;
-
     totalEl.textContent = `差の合計: ${step.total}`;
     cutEl.textContent = `境目の差: ${step.cut}`;
     answerEl.textContent = `答え: ${step.done ? step.total - step.cut : "?"}`;
     answerEl.classList.toggle("done", Boolean(step.done));
-
-    prevButton.disabled = index === 0;
-    nextButton.disabled = index === steps.length - 1;
   }
 
-  function moveTo(nextIndex) {
-    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
-    render();
-  }
-
-  prevButton.addEventListener("click", () => moveTo(index - 1));
-  nextButton.addEventListener("click", () => moveTo(index + 1));
-  resetButton.addEventListener("click", () => moveTo(0));
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") {
-      moveTo(index - 1);
-    }
-
-    if (e.key === "ArrowRight") {
-      moveTo(index + 1);
-    }
-  });
-
-  render();
+  createStepper({ steps, render });
 </script>
 </body>
 </html>
