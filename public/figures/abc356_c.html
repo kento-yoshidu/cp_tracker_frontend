@@ -151,22 +151,6 @@
     margin-top: 16px;
   }
 
-  button,
-  select {
-    min-height: 44px;
-    padding: 6px 14px;
-    border: 1px solid rgb(255 255 255 / 25%);
-    border-radius: 8px;
-    background: rgb(59 130 246 / 20%);
-    color: #fff;
-    font: inherit;
-    cursor: pointer;
-  }
-
-  select option {
-    color: #000;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .key {
       transition: none;
@@ -216,14 +200,8 @@
 
     <div class="controls">
       <button type="button" id="prev">← 前へ</button>
-      <button type="button" id="play">▶ 再生</button>
       <button type="button" id="next">次へ →</button>
       <button type="button" id="reset">最初から</button>
-      <select id="speed" aria-label="再生速度">
-        <option value="2400">ゆっくり</option>
-        <option value="1400" selected>ふつう</option>
-        <option value="700">はやい</option>
-      </select>
       <span class="progress" id="progress"></span>
     </div>
   </section>
@@ -355,9 +333,7 @@
   const progressEl = document.getElementById("progress");
   const prevButton = document.getElementById("prev");
   const nextButton = document.getElementById("next");
-  const playButton = document.getElementById("play");
   const resetButton = document.getElementById("reset");
-  const speedSelect = document.getElementById("speed");
 
   const keyEls = Array.from({ length: n }, (_, i) => {
     const el = document.createElement("div");
@@ -382,7 +358,6 @@
   answersEl.append(answerEl);
 
   let index = 0;
-  let timer = null;
 
   function render() {
     const step = steps[index];
@@ -442,31 +417,7 @@
     nextButton.disabled = index === steps.length - 1;
   }
 
-  function stop() {
-    clearInterval(timer);
-    timer = null;
-    playButton.textContent = "▶ 再生";
-  }
-
-  function start() {
-    if (index === steps.length - 1) {
-      index = 0;
-      render();
-    }
-
-    playButton.textContent = "⏸ 一時停止";
-    timer = setInterval(() => {
-      index += 1;
-      render();
-
-      if (index === steps.length - 1) {
-        stop();
-      }
-    }, Number(speedSelect.value));
-  }
-
   function moveTo(nextIndex) {
-    stop();
     index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
     render();
   }
@@ -474,21 +425,6 @@
   prevButton.addEventListener("click", () => moveTo(index - 1));
   nextButton.addEventListener("click", () => moveTo(index + 1));
   resetButton.addEventListener("click", () => moveTo(0));
-
-  playButton.addEventListener("click", () => {
-    if (timer === null) {
-      start();
-    } else {
-      stop();
-    }
-  });
-
-  speedSelect.addEventListener("change", () => {
-    if (timer !== null) {
-      stop();
-      start();
-    }
-  });
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft") {

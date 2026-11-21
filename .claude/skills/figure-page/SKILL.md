@@ -14,8 +14,9 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
   - `base.v1.css` … 全ページ共通のCSS（**作業前に必ず実物を読むこと**）
 - アプリからは問題データの `figure_url` に `/figures/<問題ID>.html` を設定して開く（フルURLは使わない）
 - 見本
-  - 再生ボタンあり・図が主役: `public/figures/abc463_c.html`
-  - 再生ボタンなし・表が主役: `public/figures/abc123_c.html`
+  - 図が主役: `public/figures/abc463_c.html`
+  - 表が主役: `public/figures/abc123_c.html`
+  - 入力例を切り替える（`<select id="example">`）: `public/figures/abc484_c.html`
 
 > 将来 S3 + CloudFront へ移行し、`next.config.ts` の rewrites で `/figures/*` を中継する予定。移行後もパスと相対参照（`./common/...`）はそのまま使える。
 
@@ -26,6 +27,7 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
 - **問題文はそのまま載せない**。自分の言葉での短い要約にとどめ、詳細は問題ページへ誘導する
 - タイトル直下に非公式の注記を必ず入れる（文言は下の骨組みのとおり）
 - 外部のスクリプト・スタイル・フォントは読み込まない（共通ファイル以外は1ファイルで完結させる）
+- **自動再生（再生ボタン・速度選択）は付けない**。操作は「前へ / 次へ / 最初から」と矢印キーのみ
 
 ## HTMLの骨組み
 
@@ -68,14 +70,8 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
 
     <div class="controls">
       <button type="button" id="prev">← 前へ</button>
-      <button type="button" id="play">▶ 再生</button>   <!-- 再生機能を付ける場合のみ -->
       <button type="button" id="next">次へ →</button>
       <button type="button" id="reset">最初から</button>
-      <select id="speed" aria-label="再生速度">          <!-- 再生機能を付ける場合のみ -->
-        <option value="2400">ゆっくり</option>
-        <option value="1400" selected>ふつう</option>
-        <option value="700">はやい</option>
-      </select>
       <span class="progress" id="progress"></span>
     </div>
   </section>
@@ -100,7 +96,8 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
 | 変数 | `:root`（`--bg` `--panel` `--border` `--text` `--muted` `--primary` `--current` `--answer` `--removed`） |
 | 土台 | `*` `body` `main` `h1` `h2` `p + p` `a` |
 | ヘッダー | `.source` `.notice` |
-| 再生UI | `.player` `.explain` `.explain h3` `.controls` `.progress` `button:disabled` `button:hover:not(:disabled)` |
+| 再生UI | `.player` `.explain` `.explain h3` `.controls` `.progress` |
+| フォーム | `button, select`（ボタン・セレクト本体） `select option` `button:disabled` `button:hover:not(:disabled)` |
 | 部品 | `.label`（図の上の小見出し） `.answers div` `.answers div.done`（答えのチップ） `td.ok`（表の正解セル） |
 
 色は必ず変数を使う（現在 = `--current`、確定・正解 = `--answer`、除外・NG = `--removed`、強調 = `--primary`）。
@@ -109,10 +106,6 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
 
 - 図そのもの（`.stage` `.cell` `.bar` など、問題ごとに自由に命名）
 - `.answers` のレイアウト（ページにより `display:flex` の詳細が違う）
-- ボタン本体のスタイル
-  - 再生ボタンあり: `button, select { … }` と `select option { color: #000; }`
-  - 再生ボタンなし: `button { … }`
-  - 既存ページからそのままコピーしてよい
 - 表を使う場合: `.table-scroll` `table` `th, td` `th` `tr.pending td` `tr.current td` など
 - `@media (prefers-reduced-motion: reduce)` で、そのページのアニメーション（transition）を止める
 
@@ -126,7 +119,7 @@ description: 競プロ問題の解説ページ（public/figures/*.html）を新�
    - `titleEl` / `textEl` にタイトル・説明を入れる
    - `progressEl.textContent = \`${index + 1} / ${steps.length}\``
    - `prevButton.disabled = index === 0; nextButton.disabled = index === steps.length - 1;`
-4. `moveTo` / `start` / `stop`、ボタン・速度・矢印キー（←→）の配線は既存ページ（`abc463_c.html`）からコピーする
+4. `moveTo`、ボタン（前へ / 次へ / 最初から）と矢印キー（←→）の配線は既存ページ（`abc463_c.html`）からコピーする
 
 ## 共通ファイルを変えるとき
 
