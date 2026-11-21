@@ -107,22 +107,6 @@
     margin-top: 8px;
   }
 
-  button,
-  select {
-    min-height: 44px;
-    padding: 6px 14px;
-    border: 1px solid rgb(255 255 255 / 25%);
-    border-radius: 8px;
-    background: rgb(59 130 246 / 20%);
-    color: #fff;
-    font: inherit;
-    cursor: pointer;
-  }
-
-  select option {
-    color: #000;
-  }
-
   .caption {
     margin-top: 4px;
     color: var(--muted);
@@ -175,14 +159,8 @@
 
     <div class="controls">
       <button type="button" id="prev">← 前へ</button>
-      <button type="button" id="play">▶ 再生</button>
       <button type="button" id="next">次へ →</button>
       <button type="button" id="reset">最初から</button>
-      <select id="speed" aria-label="再生速度">
-        <option value="2400">ゆっくり</option>
-        <option value="1400" selected>ふつう</option>
-        <option value="700">はやい</option>
-      </select>
       <span class="progress" id="progress"></span>
     </div>
   </section>
@@ -207,6 +185,7 @@
   </section>
 </main>
 
+<script src="./common/stepper.v1.js"></script>
 <script>
   const n = 4;
   const m = 5;
@@ -292,15 +271,7 @@
   const steps = buildSteps(n, m);
 
   const boardEl = document.getElementById("board");
-  const titleEl = document.getElementById("step-title");
-  const textEl = document.getElementById("step-text");
   const answersEl = document.getElementById("answers");
-  const progressEl = document.getElementById("progress");
-  const prevButton = document.getElementById("prev");
-  const nextButton = document.getElementById("next");
-  const playButton = document.getElementById("play");
-  const resetButton = document.getElementById("reset");
-  const speedSelect = document.getElementById("speed");
 
   // 盤の周りに 1 マスずつ「盤の外」のマスを置き、3×3 がはみ出す所を見せる
   boardEl.style.gridTemplateColumns = `repeat(${m + 2}, 52px)`;
@@ -321,12 +292,7 @@
 
   answersEl.append(backEl, answerEl);
 
-  let index = 0;
-  let timer = null;
-
-  function render() {
-    const step = steps[index];
-
+  function render(step) {
     cellEls.forEach(({ el, r, c }) => {
       const inRange = step.op !== undefined && Math.abs(r - step.op[0]) <= 1 && Math.abs(c - step.op[1]) <= 1;
 
@@ -348,77 +314,12 @@
       el.classList.toggle("dim", step.focus !== undefined && step.focus !== kind);
     });
 
-    titleEl.textContent = step.title;
-    textEl.textContent = step.text;
-    progressEl.textContent = `${index + 1} / ${steps.length}`;
-
     backEl.textContent = `裏の枚数: ${countBack(step.counts)}`;
     answerEl.textContent = `答え: ${step.done ? (n - 2) * (m - 2) : "?"}`;
     answerEl.classList.toggle("done", Boolean(step.done));
-
-    prevButton.disabled = index === 0;
-    nextButton.disabled = index === steps.length - 1;
   }
 
-  function stop() {
-    clearInterval(timer);
-    timer = null;
-    playButton.textContent = "▶ 再生";
-  }
-
-  function start() {
-    if (index === steps.length - 1) {
-      index = 0;
-      render();
-    }
-
-    playButton.textContent = "⏸ 一時停止";
-    timer = setInterval(() => {
-      index += 1;
-      render();
-
-      if (index === steps.length - 1) {
-        stop();
-      }
-    }, Number(speedSelect.value));
-  }
-
-  function moveTo(nextIndex) {
-    stop();
-    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
-    render();
-  }
-
-  prevButton.addEventListener("click", () => moveTo(index - 1));
-  nextButton.addEventListener("click", () => moveTo(index + 1));
-  resetButton.addEventListener("click", () => moveTo(0));
-
-  playButton.addEventListener("click", () => {
-    if (timer === null) {
-      start();
-    } else {
-      stop();
-    }
-  });
-
-  speedSelect.addEventListener("change", () => {
-    if (timer !== null) {
-      stop();
-      start();
-    }
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") {
-      moveTo(index - 1);
-    }
-
-    if (e.key === "ArrowRight") {
-      moveTo(index + 1);
-    }
-  });
-
-  render();
+  createStepper({ steps, render });
 </script>
 </body>
 </html>

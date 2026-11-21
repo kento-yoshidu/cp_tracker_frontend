@@ -124,17 +124,6 @@
     margin-top: 16px;
   }
 
-  button {
-    min-height: 44px;
-    padding: 6px 14px;
-    border: 1px solid rgb(255 255 255 / 25%);
-    border-radius: 8px;
-    background: rgb(59 130 246 / 20%);
-    color: #fff;
-    font: inherit;
-    cursor: pointer;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .ball b {
       transition: none;
@@ -191,6 +180,7 @@
   </section>
 </main>
 
+<script src="./common/stepper.v1.js"></script>
 <script>
   const a = [1, 1, 2, 1, 2];
   const pairs = (c) => (c * (c - 1)) / 2;
@@ -279,22 +269,13 @@
   const ballsEl = document.getElementById("balls");
   const countsEl = document.getElementById("counts");
   const rowsEl = document.getElementById("rows");
-  const titleEl = document.getElementById("step-title");
-  const textEl = document.getElementById("step-text");
   const answersEl = document.getElementById("answers");
-  const progressEl = document.getElementById("progress");
-  const prevButton = document.getElementById("prev");
-  const nextButton = document.getElementById("next");
-  const resetButton = document.getElementById("reset");
 
   const answerEl = document.createElement("div");
 
   answersEl.append(answerEl);
 
-  let index = 0;
-
-  function render() {
-    const step = steps[index];
+  function render(step) {
     const hasCurrent = step.current !== null;
     const removedValue = hasCurrent ? a[step.current] : null;
 
@@ -344,39 +325,13 @@
 
     rowsEl.innerHTML = table;
 
-    titleEl.textContent = step.title;
-    textEl.textContent = step.text;
-    progressEl.textContent = `${index + 1} / ${steps.length}`;
-
     const outputs = step.results.filter(Boolean).map((r) => r.ans);
 
     answerEl.textContent = `出力: ${outputs.length > 0 ? outputs.join(", ") : "-"}`;
     answerEl.classList.toggle("done", step.done);
-
-    prevButton.disabled = index === 0;
-    nextButton.disabled = index === steps.length - 1;
   }
 
-  function moveTo(nextIndex) {
-    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
-    render();
-  }
-
-  prevButton.addEventListener("click", () => moveTo(index - 1));
-  nextButton.addEventListener("click", () => moveTo(index + 1));
-  resetButton.addEventListener("click", () => moveTo(0));
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") {
-      moveTo(index - 1);
-    }
-
-    if (e.key === "ArrowRight") {
-      moveTo(index + 1);
-    }
-  });
-
-  render();
+  createStepper({ steps, render });
 </script>
 </body>
 </html>

@@ -121,22 +121,6 @@
     text-decoration: line-through;
   }
 
-  button,
-  select {
-    min-height: 44px;
-    padding: 6px 14px;
-    border: 1px solid rgb(255 255 255 / 25%);
-    border-radius: 8px;
-    background: rgb(59 130 246 / 20%);
-    color: #fff;
-    font: inherit;
-    cursor: pointer;
-  }
-
-  select option {
-    color: #000;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .gap,
     .gap-label,
@@ -178,19 +162,14 @@
 
     <div class="controls">
       <button type="button" id="prev">← 前へ</button>
-      <button type="button" id="play">▶ 再生</button>
       <button type="button" id="next">次へ →</button>
       <button type="button" id="reset">最初から</button>
-      <select id="speed" aria-label="再生速度">
-        <option value="2400">ゆっくり</option>
-        <option value="1400" selected>ふつう</option>
-        <option value="700">はやい</option>
-      </select>
       <span class="progress" id="progress"></span>
     </div>
   </section>
 </main>
 
+<script src="./common/stepper.v1.js"></script>
 <script>
   const n = 2;
   const x = [10, 12, 1, 2, 14];
@@ -289,16 +268,8 @@
   const position = (v) => 6 + ((v - min) / (max - min)) * 88;
 
   const stage = document.getElementById("stage");
-  const titleEl = document.getElementById("step-title");
-  const textEl = document.getElementById("step-text");
   const chipsEl = document.getElementById("chips");
   const answersEl = document.getElementById("answers");
-  const progressEl = document.getElementById("progress");
-  const prevButton = document.getElementById("prev");
-  const nextButton = document.getElementById("next");
-  const playButton = document.getElementById("play");
-  const resetButton = document.getElementById("reset");
-  const speedSelect = document.getElementById("speed");
 
   const gapEls = gaps.map((d, i) => {
     const el = document.createElement("div");
@@ -337,12 +308,7 @@
 
   answersEl.append(totalEl, cutEl, answerEl);
 
-  let index = 0;
-  let timer = null;
-
-  function render() {
-    const step = steps[index];
-
+  function render(step) {
     gapEls.forEach((el, i) => {
       const isRemoved = step.removed.includes(i);
 
@@ -369,78 +335,13 @@
       }),
     );
 
-    titleEl.textContent = step.title;
-    textEl.textContent = step.text;
-    progressEl.textContent = `${index + 1} / ${steps.length}`;
-
     totalEl.textContent = `差の合計: ${step.total}`;
     cutEl.textContent = `境目の差: ${step.cut}`;
     answerEl.textContent = `答え: ${step.done ? step.total - step.cut : "?"}`;
     answerEl.classList.toggle("done", Boolean(step.done));
-
-    prevButton.disabled = index === 0;
-    nextButton.disabled = index === steps.length - 1;
   }
 
-  function stop() {
-    clearInterval(timer);
-    timer = null;
-    playButton.textContent = "▶ 再生";
-  }
-
-  function start() {
-    if (index === steps.length - 1) {
-      index = 0;
-      render();
-    }
-
-    playButton.textContent = "⏸ 一時停止";
-    timer = setInterval(() => {
-      index += 1;
-      render();
-
-      if (index === steps.length - 1) {
-        stop();
-      }
-    }, Number(speedSelect.value));
-  }
-
-  function moveTo(nextIndex) {
-    stop();
-    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
-    render();
-  }
-
-  prevButton.addEventListener("click", () => moveTo(index - 1));
-  nextButton.addEventListener("click", () => moveTo(index + 1));
-  resetButton.addEventListener("click", () => moveTo(0));
-
-  playButton.addEventListener("click", () => {
-    if (timer === null) {
-      start();
-    } else {
-      stop();
-    }
-  });
-
-  speedSelect.addEventListener("change", () => {
-    if (timer !== null) {
-      stop();
-      start();
-    }
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") {
-      moveTo(index - 1);
-    }
-
-    if (e.key === "ArrowRight") {
-      moveTo(index + 1);
-    }
-  });
-
-  render();
+  createStepper({ steps, render });
 </script>
 </body>
 </html>
