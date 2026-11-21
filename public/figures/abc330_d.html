@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ABC330 D 解説</title>
+<link href="./common/base.v1.css" rel="stylesheet">
+<style>
+  h3 {
+    font-size: 16px;
+  }
+
+  ul,
+  ol {
+    margin: 8px 0 0 1.5em;
+  }
+
+  code {
+    padding: 0 4px;
+    border-radius: 4px;
+    background: rgb(255 255 255 / 10%);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 0.9em;
+  }
+
+  pre {
+    overflow-x: auto;
+    margin-top: 8px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgb(0 0 0 / 25%);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .grid-scroll {
+    overflow-x: auto;
+    margin-top: 8px;
+  }
+
+  .grid {
+    display: grid;
+    gap: 6px;
+    width: max-content;
+  }
+
+  .cell {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-weight: 700;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s, opacity 0.3s;
+  }
+
+  .cell.x {
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .cell.head {
+    border: none;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  .cell.count {
+    border-style: dashed;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .cell.count.active {
+    border-style: solid;
+    border-color: var(--current);
+    color: var(--text);
+  }
+
+  .cell.scan {
+    border-color: var(--primary);
+    background: rgb(59 130 246 / 25%);
+  }
+
+  .cell.corner {
+    border-color: var(--current);
+    background: rgb(245 158 11 / 35%);
+  }
+
+  .cell.mate-row {
+    border-color: var(--primary);
+    background: rgb(59 130 246 / 25%);
+  }
+
+  .cell.mate-col {
+    border-color: var(--answer);
+    background: rgb(34 197 94 / 25%);
+  }
+
+  .cell.dim {
+    opacity: 0.35;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .legend span::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+    border: 2px solid;
+    border-radius: 3px;
+    vertical-align: -1px;
+  }
+
+  .legend .l-corner::before {
+    border-color: var(--current);
+    background: rgb(245 158 11 / 35%);
+  }
+
+  .legend .l-row::before {
+    border-color: var(--primary);
+    background: rgb(59 130 246 / 25%);
+  }
+
+  .legend .l-col::before {
+    border-color: var(--answer);
+    background: rgb(34 197 94 / 25%);
+  }
+
+  .answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  button,
+  select {
+    min-height: 44px;
+    padding: 6px 14px;
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 8px;
+    background: rgb(59 130 246 / 20%);
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  select option {
+    color: #000;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cell {
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>ABC330 D - Counting Ls</h1>
+  <p class="source"><a href="https://atcoder.jp/contests/abc330/tasks/abc330_d" target="_blank" rel="noopener noreferrer">問題ページ</a></p>
+  <p class="notice">非公式解説です。内容はすべて Claude Code が出力しています。</p>
+
+  <h2>問題の要約</h2>
+  <p>N × N のマス目があり、各マスは <code>o</code> か <code>x</code> です。次の条件をすべて満たす<strong>3 マスの組</strong>が何通りあるかを求める問題です。</p>
+  <ul>
+    <li>3 マスとも <code>o</code></li>
+    <li>ちょうど 2 マスが同じ行にある</li>
+    <li>ちょうど 2 マスが同じ列にある</li>
+  </ul>
+  <p>N ≤ 2000 なので、3 マスを全部試す O(N<sup>6</sup>) は間に合いません。</p>
+
+  <h2>考え方</h2>
+  <h3>1. 3 マスは必ず「L 字」になる</h3>
+  <p>条件を満たす 3 マスを並べると、必ず次のような L 字になります。</p>
+  <pre>A . . B      ← A と B が同じ行
+. . . .
+C . . .      ← A と C が同じ列</pre>
+  <p>A は「B と同じ行」かつ「C と同じ列」にある<strong>角（かど）</strong>のマスです。1 つの組に角はちょうど 1 つなので、<strong>どのマスを角にするかで場合分け</strong>すれば、二重に数えることも数え漏らすこともありません。</p>
+
+  <h3>2. 角を (i, j) に決めたときの選び方</h3>
+  <p>行 i にある <code>o</code> の数を <code>w[i]</code>、列 j にある <code>o</code> の数を <code>h[j]</code> とします。角 A = (i, j) が <code>o</code> のとき、</p>
+  <ul>
+    <li>B は行 i の、A 以外の <code>o</code> → <code>w[i] − 1</code> 通り</li>
+    <li>C は列 j の、A 以外の <code>o</code> → <code>h[j] − 1</code> 通り</li>
+  </ul>
+  <p>B と C は別々に選べるので、角が (i, j) の組は <strong>(w[i] − 1) × (h[j] − 1)</strong> 通りです。</p>
+
+  <h3>3. 全マスで足し合わせる</h3>
+  <p>先に <code>w</code> と <code>h</code> を数えておき、<code>o</code> のマスすべてについて上の式を足せば答えです。</p>
+  <pre>for i in 0..n {
+    for j in 0..n {
+        if s[i][j] == 'o' {
+            ans += (w[i] - 1) * (h[j] - 1);
+        }
+    }
+}</pre>
+  <p>計算量は O(N<sup>2</sup>) です。答えは最大で N<sup>2</sup> × (N − 1)<sup>2</sup> ≒ 1.6 × 10<sup>13</sup> 程度なので、64bit 整数を使います。</p>
+
+  <h3>4. 注意：w と h を取り違えない</h3>
+  <p>正方形のマス目でも、<code>w[i]</code>（i 行目の個数）と <code>h[i]</code>（i 列目の個数）は別の場所の個数です。<code>s[i][j]</code> は「行 i・列 j」なので、使うのは <code>w[i]</code> と <code>h[j]</code> です。</p>
+  <p>入力例1で <code>(h[i] − 1) × (w[j] − 1)</code> と書いてしまうと、右上のマス (0, 2) が 2 ではなく 0 と数えられ、答えが 4 ではなく 2 になります。</p>
+
+  <h2>動かして確認する</h2>
+  <section class="player" aria-label="アルゴリズムのステップ再生">
+    <div class="controls">
+      <select id="example" aria-label="入力例">
+        <option value="0">入力例1</option>
+        <option value="1">入力例2</option>
+      </select>
+    </div>
+
+    <div class="grid-scroll"><div class="grid" id="grid"></div></div>
+    <div class="legend">
+      <span class="l-corner">角 A</span>
+      <span class="l-row">B の候補（同じ行）</span>
+      <span class="l-col">C の候補（同じ列）</span>
+    </div>
+
+    <div class="explain" aria-live="polite">
+      <h3 id="step-title"></h3>
+      <p id="step-text"></p>
+    </div>
+
+    <div class="answers" id="answers"></div>
+
+    <div class="controls">
+      <button type="button" id="prev">← 前へ</button>
+      <button type="button" id="next">次へ →</button>
+      <button type="button" id="reset">最初から</button>
+      <span class="progress" id="progress"></span>
+    </div>
+  </section>
+</main>
+
+<script>
+  const examples = [
+    ["ooo", "oxx", "xxo"],
+    ["oxxx", "xoxx", "xxox", "xxxo"],
+  ];
+
+  const pos = (i, j) => `(${i}, ${j})`;
+
+  // アルゴリズムを実際に実行し、各時点の状態を steps に記録する
+  function buildSteps(rows) {
+    const n = rows.length;
+    const s = rows.map((r) => r.split(""));
+    const steps = [];
+    let w = Array(n).fill(null);
+    let h = Array(n).fill(null);
+    let scan = [];
+    let activeW = null;
+    let activeH = null;
+    let corner = null;
+    let ans = 0;
+    let done = false;
+
+    const record = (title, text) => {
+      steps.push({
+        title,
+        text,
+        w: [...w],
+        h: [...h],
+        scan: [...scan],
+        activeW,
+        activeH,
+        corner,
+        ans,
+        done,
+      });
+    };
+
+    record("準備", `${n} × ${n} のマス目です。まず各行・各列にある o の数を数えます。`);
+
+    for (let i = 0; i < n; i++) {
+      w[i] = s[i].filter((c) => c === "o").length;
+      scan = Array.from({ length: n }, (_, j) => [i, j]);
+      activeW = i;
+      record(`行 ${i} を数える`, `行 ${i} は "${rows[i]}" なので、o は ${w[i]} 個です。w[${i}] = ${w[i]}。`);
+    }
+
+    activeW = null;
+
+    for (let j = 0; j < n; j++) {
+      h[j] = s.filter((r) => r[j] === "o").length;
+      scan = Array.from({ length: n }, (_, i) => [i, j]);
+      activeH = j;
+      record(`列 ${j} を数える`, `列 ${j} を上から見ると "${s.map((r) => r[j]).join("")}" なので、o は ${h[j]} 個です。h[${j}] = ${h[j]}。`);
+    }
+
+    activeH = null;
+    scan = [];
+
+    record("角を 1 マスずつ試す", "o のマスを順に「角 A」として、(w[i] − 1) × (h[j] − 1) を足していきます。x のマスは角になれないので飛ばします。");
+
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < n; j++) {
+        if (s[i][j] !== "o") {
+          continue;
+        }
+
+        corner = [i, j];
+        activeW = i;
+        activeH = j;
+
+        const b = w[i] - 1;
+        const c = h[j] - 1;
+        const add = b * c;
+
+        ans += add;
+
+        const bList = [];
+        const cList = [];
+
+        for (let k = 0; k < n; k++) {
+          if (k !== j && s[i][k] === "o") {
+            bList.push(pos(i, k));
+          }
+
+          if (k !== i && s[k][j] === "o") {
+            cList.push(pos(k, j));
+          }
+        }
+
+        const bText = bList.length ? bList.join("・") : "なし";
+        const cText = cList.length ? cList.join("・") : "なし";
+
+        record(
+          `角 = ${pos(i, j)}`,
+          `B の候補（行 ${i} の他の o）は ${bText} で w[${i}] − 1 = ${b} 通り、C の候補（列 ${j} の他の o）は ${cText} で h[${j}] − 1 = ${c} 通りです。${b} × ${c} = ${add} を足して ans = ${ans}。`,
+        );
+      }
+    }
+
+    corner = null;
+    activeW = null;
+    activeH = null;
+    done = true;
+
+    record(`答えは ${ans}`, `すべての o のマスを角として試しました。答えは ${ans} で、入力例の出力と一致します。`);
+
+    return steps;
+  }
+
+  // --- 描画 ---
+  const gridEl = document.getElementById("grid");
+  const titleEl = document.getElementById("step-title");
+  const textEl = document.getElementById("step-text");
+  const answersEl = document.getElementById("answers");
+  const progressEl = document.getElementById("progress");
+  const exampleSelect = document.getElementById("example");
+  const prevButton = document.getElementById("prev");
+  const nextButton = document.getElementById("next");
+  const resetButton = document.getElementById("reset");
+
+  const answerEl = document.createElement("div");
+
+  answersEl.append(answerEl);
+
+  let rows = examples[0];
+  let steps = buildSteps(rows);
+  let index = 0;
+
+  function render() {
+    const step = steps[index];
+    const n = rows.length;
+    const inScan = (i, j) => step.scan.some(([a, b]) => a === i && b === j);
+
+    gridEl.style.gridTemplateColumns = `repeat(${n + 2}, 40px)`;
+
+    let html = '<span class="cell head"></span>';
+
+    for (let j = 0; j < n; j++) {
+      html += `<span class="cell head">列${j}</span>`;
+    }
+
+    html += '<span class="cell head">w</span>';
+
+    for (let i = 0; i < n; i++) {
+      html += `<span class="cell head">行${i}</span>`;
+
+      for (let j = 0; j < n; j++) {
+        const ch = rows[i][j];
+        const cls = [ch === "x" ? "x" : ""];
+
+        if (step.corner) {
+          const [ci, cj] = step.corner;
+
+          if (i === ci && j === cj) {
+            cls.push("corner");
+          } else if (ch === "o" && i === ci) {
+            cls.push("mate-row");
+          } else if (ch === "o" && j === cj) {
+            cls.push("mate-col");
+          } else {
+            cls.push("dim");
+          }
+        } else if (inScan(i, j)) {
+          cls.push("scan");
+        }
+
+        html += `<span class="cell ${cls.join(" ")}">${ch}</span>`;
+      }
+
+      html += `<span class="cell count ${step.activeW === i ? "active" : ""}">${step.w[i] ?? "?"}</span>`;
+    }
+
+    html += '<span class="cell head">h</span>';
+
+    for (let j = 0; j < n; j++) {
+      html += `<span class="cell count ${step.activeH === j ? "active" : ""}">${step.h[j] ?? "?"}</span>`;
+    }
+
+    html += '<span class="cell head"></span>';
+
+    gridEl.innerHTML = html;
+
+    titleEl.textContent = step.title;
+    textEl.textContent = step.text;
+    progressEl.textContent = `${index + 1} / ${steps.length}`;
+
+    answerEl.textContent = `ans: ${step.ans}`;
+    answerEl.classList.toggle("done", step.done);
+
+    prevButton.disabled = index === 0;
+    nextButton.disabled = index === steps.length - 1;
+  }
+
+  function moveTo(nextIndex) {
+    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
+    render();
+  }
+
+  exampleSelect.addEventListener("change", () => {
+    rows = examples[Number(exampleSelect.value)];
+    steps = buildSteps(rows);
+    moveTo(0);
+  });
+
+  prevButton.addEventListener("click", () => moveTo(index - 1));
+  nextButton.addEventListener("click", () => moveTo(index + 1));
+  resetButton.addEventListener("click", () => moveTo(0));
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      moveTo(index - 1);
+    }
+
+    if (e.key === "ArrowRight") {
+      moveTo(index + 1);
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>
