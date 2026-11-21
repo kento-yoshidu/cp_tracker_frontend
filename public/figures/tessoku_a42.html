@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>鉄則本 A42 解説</title>
+<link href="./common/base.v1.css" rel="stylesheet">
+<style>
+  h3 {
+    font-size: 16px;
+  }
+
+  ul,
+  ol {
+    margin: 8px 0 0 1.5em;
+  }
+
+  code {
+    padding: 0 4px;
+    border-radius: 4px;
+    background: rgb(255 255 255 / 10%);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 0.9em;
+  }
+
+  pre {
+    overflow-x: auto;
+    margin-top: 8px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgb(0 0 0 / 25%);
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .plot {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 8px auto 0;
+  }
+
+  .plot .axis {
+    stroke: var(--muted);
+    stroke-width: 1;
+  }
+
+  .plot .gridline {
+    stroke: rgb(255 255 255 / 8%);
+    stroke-width: 1;
+  }
+
+  .plot text {
+    fill: var(--muted);
+    font-size: 11px;
+  }
+
+  .plot .box {
+    fill: rgb(245 158 11 / 15%);
+    stroke: var(--current);
+    stroke-width: 2;
+  }
+
+  .plot .student {
+    fill: rgb(255 255 255 / 20%);
+    stroke: var(--muted);
+    stroke-width: 2;
+  }
+
+  .plot .student.in {
+    fill: rgb(34 197 94 / 50%);
+    stroke: var(--answer);
+  }
+
+  .plot .student-label {
+    fill: var(--text);
+    font-size: 11px;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    margin-top: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  th {
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  tr.pending td {
+    color: rgb(255 255 255 / 35%);
+  }
+
+  td.ng {
+    color: var(--removed);
+    font-weight: 700;
+  }
+
+  .answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .answers div.set {
+    border-color: var(--current);
+    color: var(--text);
+  }
+
+  button {
+    min-height: 44px;
+    padding: 6px 14px;
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: 8px;
+    background: rgb(59 130 246 / 20%);
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>鉄則本 A42 - Soccer</h1>
+  <p class="source"><a href="https://atcoder.jp/contests/tessoku-book/tasks/tessoku_book_ap" target="_blank" rel="noopener noreferrer">問題ページ</a></p>
+  <p class="notice">非公式解説です。内容はすべて Claude Code が出力しています。</p>
+
+  <h2>問題の要約</h2>
+  <p>N 人の生徒がいて、生徒 i の体力は A<sub>i</sub>、気力は B<sub>i</sub> です。何人かを選んで、次の 2 つを満たすようにします。</p>
+  <ul>
+    <li>選んだ生徒の体力の最大と最小の差が K 以下</li>
+    <li>選んだ生徒の気力の最大と最小の差が K 以下</li>
+  </ul>
+  <p>最大で何人選べるかを求める問題です。体力・気力は 1 以上 100 以下です。</p>
+
+  <h2>考え方</h2>
+  <h3>1. 「誰を選ぶか」ではなく「範囲」を決める</h3>
+  <p>どの生徒を選ぶかをそのまま考えると、選び方は 2<sup>N</sup> 通りあって全部は試せません。</p>
+  <p>そこで見方を変えて、<strong>体力の範囲を先に決めてしまいます</strong>。例えば K = 30 で「体力が 20 以上 50 以下の生徒だけ選ぶ」と決めれば、選んだ生徒同士の体力の差は必ず 30 以下になります。この範囲に入る生徒は<strong>全員選んで問題ありません</strong>（人数が多いほど得なので）。</p>
+
+  <h3>2. 体力と気力、両方の下限を全部試す</h3>
+  <p>気力も同じように考えます。</p>
+  <ul>
+    <li>体力の下限を x に決める → 体力が x 以上 x + K 以下</li>
+    <li>気力の下限を y に決める → 気力が y 以上 y + K 以下</li>
+  </ul>
+  <p>この両方を満たす生徒を全員選べば、条件を満たします。図で言うと、<strong>体力を横軸・気力を縦軸にしたときに、一辺 K の正方形に入る生徒</strong>を選ぶことになります。</p>
+  <p>どの (x, y) が一番いいかは分からないので、<strong>x も y も 1〜100 を全部試します</strong>。</p>
+  <pre>for x in 1..=100 {
+    for y in 1..=100 {
+        // x &lt;= a[i] &lt;= x + k かつ y &lt;= b[i] &lt;= y + k の生徒を数える
+        ans = ans.max(calc(n, k, x, y, &amp;a, &amp;b));
+    }
+}</pre>
+
+  <h3>3. 計算量</h3>
+  <p>(x, y) の組は 100 × 100 = 10<sup>4</sup> 通りで、それぞれ N 人を調べます。N ≤ 300 なので、全体で 10<sup>4</sup> × 300 = 3 × 10<sup>6</sup> 回程度で、十分間に合います。</p>
+
+  <h2>動かして確認する</h2>
+  <p>入力例1（N = 4, K = 30）を使います。プログラムは x, y を 1〜100 すべて試しますが、ここでは表示を短くするため、<strong>x, y が生徒の体力・気力のどれかと等しい組だけ</strong>を順に見せます。</p>
+
+  <section class="player" aria-label="アルゴリズムのステップ再生">
+    <svg class="plot" id="plot" viewBox="0 0 360 360" role="img" aria-label="体力と気力の散布図"></svg>
+
+    <div class="table-scroll"><table id="students"></table></div>
+
+    <div class="explain" aria-live="polite">
+      <h3 id="step-title"></h3>
+      <p id="step-text"></p>
+    </div>
+
+    <div class="answers" id="answers"></div>
+
+    <div class="controls">
+      <button type="button" id="prev">← 前へ</button>
+      <button type="button" id="next">次へ →</button>
+      <button type="button" id="reset">最初から</button>
+      <span class="progress" id="progress"></span>
+    </div>
+  </section>
+</main>
+
+<script>
+  const n = 4;
+  const k = 30;
+  const students = [
+    { a: 20, b: 30 },
+    { a: 10, b: 40 },
+    { a: 50, b: 10 },
+    { a: 30, b: 60 },
+  ];
+
+  const inside = (s, x, y) => x <= s.a && s.a <= x + k && y <= s.b && s.b <= y + k;
+
+  // アルゴリズムを実際に実行し、各時点の状態を steps に記録する
+  function buildSteps() {
+    const steps = [];
+    const xs = [...new Set(students.map((s) => s.a))].sort((p, q) => p - q);
+    const ys = [...new Set(students.map((s) => s.b))].sort((p, q) => p - q);
+    let x = null;
+    let y = null;
+    let count = null;
+    let ans = 0;
+    let done = false;
+
+    const record = (title, text) => {
+      steps.push({ title, text, x, y, count, ans, done });
+    };
+
+    record(
+      "準備",
+      `生徒は ${n} 人、K = ${k} です。体力の下限 x と気力の下限 y を決めて、「体力 x〜x+${k}、気力 y〜y+${k}」の正方形に入る生徒を数えます。`,
+    );
+
+    for (const cx of xs) {
+      for (const cy of ys) {
+        x = cx;
+        y = cy;
+        count = students.filter((s) => inside(s, x, y)).length;
+
+        const names = students
+          .map((s, i) => (inside(s, x, y) ? `生徒${i + 1}` : null))
+          .filter(Boolean);
+        const who = names.length ? names.join("・") : "いません";
+        const prev = ans;
+
+        ans = Math.max(ans, count);
+
+        const tail =
+          ans > prev
+            ? `これまでの最大 ${prev} より多いので、ans = ${ans} に更新します。`
+            : `ans = ${ans} のままです。`;
+
+        record(
+          `x = ${x}, y = ${y}`,
+          `体力 ${x}〜${x + k}、気力 ${y}〜${y + k} に入るのは ${who}（${count} 人）です。${tail}`,
+        );
+      }
+    }
+
+    x = null;
+    y = null;
+    count = null;
+    done = true;
+
+    record(`答えは ${ans}`, `すべての (x, y) を試して、最大は ${ans} 人でした。入力例1の出力と一致します。`);
+
+    return steps;
+  }
+
+  // --- 描画 ---
+  const steps = buildSteps();
+
+  const plotEl = document.getElementById("plot");
+  const studentsEl = document.getElementById("students");
+  const titleEl = document.getElementById("step-title");
+  const textEl = document.getElementById("step-text");
+  const answersEl = document.getElementById("answers");
+  const progressEl = document.getElementById("progress");
+  const prevButton = document.getElementById("prev");
+  const nextButton = document.getElementById("next");
+  const resetButton = document.getElementById("reset");
+
+  const left = 40;
+  const bottom = 320;
+  const scale = 2.9;
+  const px = (v) => left + v * scale;
+  const py = (v) => bottom - v * scale;
+
+  const xEl = document.createElement("div");
+  const yEl = document.createElement("div");
+  const countEl = document.createElement("div");
+  const ansEl = document.createElement("div");
+
+  answersEl.append(xEl, yEl, countEl, ansEl);
+
+  let index = 0;
+
+  function render() {
+    const step = steps[index];
+    const hasBox = step.x !== null;
+
+    let svg = '<defs><clipPath id="area"><rect x="' + px(0) + '" y="' + py(100) + '" width="' + 100 * scale + '" height="' + 100 * scale + '"></rect></clipPath></defs>';
+
+    for (let v = 0; v <= 100; v += 10) {
+      svg += `<line class="gridline" x1="${px(v)}" y1="${py(0)}" x2="${px(v)}" y2="${py(100)}"></line>`;
+      svg += `<line class="gridline" x1="${px(0)}" y1="${py(v)}" x2="${px(100)}" y2="${py(v)}"></line>`;
+
+      if (v % 20 === 0) {
+        svg += `<text x="${px(v)}" y="${py(0) + 16}" text-anchor="middle">${v}</text>`;
+        svg += `<text x="${px(0) - 8}" y="${py(v) + 4}" text-anchor="end">${v}</text>`;
+      }
+    }
+
+    svg += `<line class="axis" x1="${px(0)}" y1="${py(0)}" x2="${px(100)}" y2="${py(0)}"></line>`;
+    svg += `<line class="axis" x1="${px(0)}" y1="${py(0)}" x2="${px(0)}" y2="${py(100)}"></line>`;
+    svg += `<text x="${px(100)}" y="${py(0) + 32}" text-anchor="end">体力 →</text>`;
+    svg += `<text x="${px(0)}" y="${py(100) - 10}" text-anchor="start">↑ 気力</text>`;
+
+    if (hasBox) {
+      svg += `<rect class="box" clip-path="url(#area)" x="${px(step.x)}" y="${py(step.y + k)}" width="${k * scale}" height="${k * scale}"></rect>`;
+    }
+
+    students.forEach((s, i) => {
+      const cls = hasBox && inside(s, step.x, step.y) ? "in" : "";
+
+      svg += `<circle class="student ${cls}" cx="${px(s.a)}" cy="${py(s.b)}" r="7"></circle>`;
+      svg += `<text class="student-label" x="${px(s.a) + 10}" y="${py(s.b) - 8}">生徒${i + 1}</text>`;
+    });
+
+    plotEl.innerHTML = svg;
+
+    let html = "<tr><th>生徒</th><th>体力 A</th><th>気力 B</th><th>体力が範囲内</th><th>気力が範囲内</th><th>選ぶ</th></tr>";
+
+    students.forEach((s, i) => {
+      if (!hasBox) {
+        html += `<tr class="pending"><td>${i + 1}</td><td>${s.a}</td><td>${s.b}</td><td></td><td></td><td></td></tr>`;
+
+        return;
+      }
+
+      const okA = step.x <= s.a && s.a <= step.x + k;
+      const okB = step.y <= s.b && s.b <= step.y + k;
+      const mark = (ok) => `<td class="${ok ? "ok" : "ng"}">${ok ? "○" : "✗"}</td>`;
+
+      html += `<tr><td>${i + 1}</td><td>${s.a}</td><td>${s.b}</td>${mark(okA)}${mark(okB)}${mark(okA && okB)}</tr>`;
+    });
+
+    studentsEl.innerHTML = html;
+
+    titleEl.textContent = step.title;
+    textEl.textContent = step.text;
+    progressEl.textContent = `${index + 1} / ${steps.length}`;
+
+    xEl.textContent = `体力 ${hasBox ? `${step.x}〜${step.x + k}` : "?"}`;
+    yEl.textContent = `気力 ${hasBox ? `${step.y}〜${step.y + k}` : "?"}`;
+    countEl.textContent = `人数: ${step.count ?? "?"}`;
+    xEl.classList.toggle("set", hasBox);
+    yEl.classList.toggle("set", hasBox);
+    countEl.classList.toggle("set", hasBox);
+    ansEl.textContent = `ans: ${step.ans}`;
+    ansEl.classList.toggle("done", step.done);
+
+    prevButton.disabled = index === 0;
+    nextButton.disabled = index === steps.length - 1;
+  }
+
+  function moveTo(nextIndex) {
+    index = Math.min(Math.max(nextIndex, 0), steps.length - 1);
+    render();
+  }
+
+  prevButton.addEventListener("click", () => moveTo(index - 1));
+  nextButton.addEventListener("click", () => moveTo(index + 1));
+  resetButton.addEventListener("click", () => moveTo(0));
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      moveTo(index - 1);
+    }
+
+    if (e.key === "ArrowRight") {
+      moveTo(index + 1);
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>
