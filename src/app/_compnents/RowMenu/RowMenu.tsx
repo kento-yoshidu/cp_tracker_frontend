@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import type { Problem } from "@/types";
 import styles from "./rowMenu.module.css";
 
@@ -12,69 +11,70 @@ type Props = {
 };
 
 export default function RowMenu({ row, onEdit, onDelete, onArchive }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
+  const popoverId = `row-menu-${row.id}`;
+  const anchorName = `--row-menu-${row.id}`;
 
   const handleEdit = () => {
-    setIsOpen(false);
     onEdit(row);
   };
 
   const handleDelete = () => {
-    setIsOpen(false);
     onDelete(row.id);
   };
 
   const handleArchive = () => {
-    setIsOpen(false);
     onArchive(row.id);
   };
 
   return (
-    <div className={styles.wrapper}>
+    <>
       <button
         type="button"
+        popoverTarget={popoverId}
         className={styles.trigger}
-        onClick={() => setIsOpen((prev) => !prev)}
+        style={{ anchorName }}
         aria-label="メニューを開く"
       >
         ⋮
       </button>
 
-      {isOpen && (
-        <>
-          <div
-            className={styles.overlay}
-            onClick={() => setIsOpen(false)}
-          />
+      <div
+        id={popoverId}
+        popover="auto"
+        className={styles.menu}
+        style={{ positionAnchor: anchorName }}
+      >
+        <button
+          type="button"
+          className={styles.menuItem}
+          popoverTarget={popoverId}
+          popoverTargetAction="hide"
+          onClick={handleEdit}
+        >
+          更新
+        </button>
 
-          <div className={styles.menu}>
-            <button
-              type="button"
-              className={styles.menuItem}
-              onClick={handleEdit}
-            >
-              更新
-            </button>
+        <button
+          type="button"
+          className={styles.menuItem}
+          popoverTarget={popoverId}
+          popoverTargetAction="hide"
+          onClick={handleDelete}
+        >
+          削除
+        </button>
 
-            <button
-              type="button"
-              className={styles.menuItem}
-              onClick={handleDelete}
-            >
-              削除
-            </button>
-
-            <button
-              type="button"
-              className={styles.menuItem}
-              title="近日公開"
-              onClick={handleArchive}
-            >
-              アーカイブ
-            </button>
-          </div>
-        </>
-      )}
-    </div>
+        <button
+          type="button"
+          className={styles.menuItem}
+          title="近日公開"
+          popoverTarget={popoverId}
+          popoverTargetAction="hide"
+          onClick={handleArchive}
+        >
+          アーカイブ
+        </button>
+      </div>
+    </>
   );
 }
